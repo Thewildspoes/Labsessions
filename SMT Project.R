@@ -15,7 +15,6 @@ library(psych)
 
 dsCase["PreferAirplane"]
 
-# Love you
 mean(dsCase$PreferAirplane, na.rm = TRUE)
 dsCase$PreferAirplane[is.na(dsCase$PreferAirplane)] <-
   round(mean(dsCase$PreferAirplane, na.rm=TRUE))
