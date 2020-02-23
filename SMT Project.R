@@ -10,13 +10,14 @@ dsCase <- read.csv2(file = "Data/SMT1920casus01.csv",
 #Hier wordt het psych pakket eenmalig geinstalleerd. Door de installatie
 # van dit pakket kan men gemakkelijker functies berekenen die niet automatisch
 # in R studio zitten.
-install.packages("psych", dependencies = TRUE)
+# install.packages("psych", dependencies = TRUE)
 library(psych)
 
-dsCase["PreferAirplane"]
+# dsCase["PreferAirplane"]
+# Checken hoeveel NA cases er zijn in PreferAirplane. 
+# colSums(is.na(dsCase, PreferAirplane))
 
-mean(dsCase$PreferAirplane, na.rm = TRUE)
-dsCase$PreferAirplane[is.na(dsCase$PreferAirplane)] <-
-  round(mean(dsCase$PreferAirplane, na.rm=TRUE))
-
+pref <- c("PreferTrain", "PreferAirplane")
+# door middel van deze functie kan de Cronbach Alpha worden berekend. 
+psych::alpha(dsCase[pref])
 
