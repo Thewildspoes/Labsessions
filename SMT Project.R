@@ -17,7 +17,80 @@ library(psych)
 # Checken hoeveel NA cases er zijn in PreferAirplane. 
 # colSums(is.na(dsCase, PreferAirplane))
 
-pref <- c("PreferTrain", "PreferAirplane")
-# door middel van deze functie kan de Cronbach Alpha worden berekend. 
-psych::alpha(dsCase[pref])
+# Eerst wordt er een overkoepelende term aangemaakt die Nep01 tot Nep05
+# samenvat zodat er niet continu de hele rij herschreven hoeft te worden.
+# Vervolgens wordt de Cronbach's Alpha berekend voor Environmental Beliefs (EnvironBelief). 
+# Door "Keys = c(...)" wordt er rekening gehouden met de negatief geformuleerde vragen die 
+# verandert moeten worden in omgedraaide antwoorden.
+EnvironBelief <- c("Nep01", "Nep02", "Nep03", "Nep04", "Nep05")
+psych::alpha(dsCase[EnvironBelief], 
+             keys = c("Nep01", "Nep05"))
+
+# Hier wordt Cronbach's Alpha berekend voor Guilt Feelings door middel van de 
+# overkoepelende term "GuiltFeel". Door "Keys = c(...)" wordt er rekening gehouden met
+# de negatief geformuleerde vragen die verandert moeten worden in omgedraaide antwoorden.
+GuiltFeel <- c("Guilt01", "Guilt02", "Guilt03", "Guilt04", "Guilt05")
+psych::alpha(dsCase[GuiltFeel], 
+             keys = c("Guilt03", "Guilt04", "Guilt05"))
+
+# Hier wordt Cronbach's Alpha berekend voor Personality door middel van de 
+# overkoepelende term "Personal". Door "Keys = c(...)" wordt er rekening gehouden met
+# de negatief geformuleerde vragen die verandert moeten worden in omgedraaide antwoorden.
+Personal <- c("Big01", "Big02", "Big03","Big04","Big06", "Big07", "Big08", "Big09")
+psych::alpha(dsCase[Personal], 
+             keys = c("Big01", "Big03", "Big07", "Big09"))
+
+
+# Hier bereken je het gemiddelde van de indicator EnvironBelief, vervolgens 
+# geeft str(rsltEnvironBelief) aan welke waarden er in rsltEnvironBelief zitten,
+# waaronder het gemiddelde.
+rsltEnvironBelief <-
+  alpha(dsCase[EnvironBelief],
+        keys = c("Nep01", "Nep05"),
+        cumulative = FALSE)
+dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
+
+str(rsltEnvironBelief)
+
+# Hier bereken je het gemiddelde van de indicator GuiltFeel, vervolgens 
+# geeft str(rsltGuiltFeel) aan welke waarden er in rsltGuiltFeel zitten, waaronder
+# het gemiddelde. 
+rsltGuiltFeel <-
+  alpha(dsCase[GuiltFeel],
+        keys = c("Guilt03", "Guilt04", "Guilt05"),
+        cumulative = FALSE)
+dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
+
+str(rsltGuiltFeel)
+
+# Hier bereken je het gemiddelde van de indicator Personal, vervolgens 
+# geeft str(rsltPersonal) aan welke waarden er in rsltPersonal zitten, waaronder
+# het gemiddelde.
+rsltPersonal <-
+  alpha(dsCase[Personal],
+        keys = c("Big01", "Big03", "Big07", "Big09"),
+        cumulative = FALSE)
+dsCase$avgPersonal <- rsltPersonal$scores
+
+str(rsltPersonal)
+
+#dsCase$sumRisk <- alpha(dsCase[Personal], 
+#             keys = c("Big02", "Big04","Big06", "Big08", "Big10"), 
+#             cumulative = TRUE)$scores
+#dsCase$respGroup <-
+#  cut(dsCase$sumRisk,
+ #     quantile(dsCase$sumRisk, probs = seq(0,1, by=0.2)),
+  #    labels = FALSE)
+#
+#avg01 <- tapply(dsCase$RISK01,
+ #               dsCase$RespGroup, mean, na.rm= TRUE)
+#avg02 <- tapply (dsCase$RISK01, dsCase$respGroup, mean, na.rm= TRUE)
+
+#barplot(avg01, main="Mean of RISK01 by group",
+   #     ylab = "Mean", xlab = "Respondent group",
+    #    las = 1)
+
+
+
+
 
