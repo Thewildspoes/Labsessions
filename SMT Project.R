@@ -116,9 +116,80 @@ str(rsltPersonal)
 #------------------------------------------------------------------------------------
 # Beschrijvende Analyse 
 #------------------------------------------------------------------------------------
+# Hier wordt de mean voor ManipDest / ManipInfo / ManipTax / Schiphol Train en
+# SchipholCar gegeven.  
+mean(dsCase$ManipDest)
+mean(dsCase$ManipInfo)
+mean(dsCase$ManipTax)
+mean(dsCase$SchipholTrain)
+mean(dsCase$SchipholCar)
+
+# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
+# environmental beliefs.
+rsltEnvironBelief <-
+  alpha(dsCase[EnvironBelief],
+        keys = c("Nep01", "Nep05"),
+        cumulative = FALSE)
+dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
+str(rsltEnvironBelief)
+
+# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
+# Guilt Feelings dus Schuldgevoel. 
+rsltGuiltFeel <-
+  alpha(dsCase[Personal],
+        keys = c("Guilt03", "Guilt04", "Guilt05"),
+        cumulative = FALSE)
+dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
+str(rsltGuiltFeel)
+
+# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
+# Personality dus Persoonlijkheid met uitzondering van Big05 en Big10 omdat 
+# Die eerder geelimineerd zijn. 
+rsltPersonal <-
+  alpha(dsCase[Personal],
+        keys = c("Big01", "Big03", "Big07", "Big09"),
+        cumulative = FALSE)
+dsCase$avgPersonal <- rsltPersonal$scores
+str(rsltPersonal)
+
+# Hier wordt de standaard deviatie berekent voor ManipDest / ManipInfo / ManipTax / 
+# Schiphol Train en SchipholCar / Alle items van NEP / Alle items van GuiltFeel
+# en alle items van Personality.
+sd(dsCase$ManipDest)
+sd(dsCase$ManipInfo)
+sd(dsCase$ManipTax)
+sd(dsCase$SchipholTrain)
+sd(dsCase$SchipholCar)
+sd(dsCase$Nep01, dsCase$Nep02, dsCase$Nep03, dsCase$Nep04, dsCase$Nep05,
+       na.rm = TRUE)
+sd(dsCase$Guilt01, dsCase$Guilt02, dsCase$Guilt03, dsCase$Guilt04, 
+       dsCase$Guilt05, na.rm = TRUE)
+sd(dsCase$Big01, dsCase$Big02, dsCase$Big03, dsCase$Big04, dsCase$Big06,
+       dsCase$Big07, dsCase$Big08, dsCase$Big09, na.rm = TRUE)
 
 
+# Hier wordt de smediaan berekent voor ManipDest / ManipInfo / ManipTax / 
+# Schiphol Train / SchipholCar / Alle items van NEP / Alle items van GuiltFeel
+# en alle items van Personality.
+median(dsCase$ManipDest)
+median(dsCase$ManipInfo)
+median(dsCase$ManipTax)
+median(dsCase$SchipholTrain)
+median(dsCase$SchipholCar)
+median(dsCase$Nep01, dsCase$Nep02, dsCase$Nep03, dsCase$Nep04, dsCase$Nep05,
+       na.rm = TRUE)
+median(dsCase$Guilt01, dsCase$Guilt02, dsCase$Guilt03, dsCase$Guilt04, 
+       dsCase$Guilt05, na.rm = TRUE)
+median(dsCase$Big01, dsCase$Big02, dsCase$Big03, dsCase$Big04, dsCase$Big06,
+       dsCase$Big07, dsCase$Big08, dsCase$Big09, na.rm = TRUE)
 
+# Hier kan je de N vinden van ManipDest / ManipInfo / ManipTax / 
+# Schiphol Train en SchipholCar.
+describe(dsCase$ManipDest)
+describe(dsCase$ManipInfo)
+describe(dsCase$ManipTax)
+describe(dsCase$SchipholTrain)
+describe(dsCase$SchipholCar)
 #------------------------------------------------------------------------------------
 # Analyse Paarsgewijze Samenhangen
 #------------------------------------------------------------------------------------
