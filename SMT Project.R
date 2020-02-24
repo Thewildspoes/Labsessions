@@ -6,6 +6,7 @@ setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
+setwd("C:/Users/Barbara/Documents")
 
 
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
