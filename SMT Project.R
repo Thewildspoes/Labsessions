@@ -6,6 +6,10 @@ setwd("/Users/amaniberkhof")
 
 setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
+setwd("C:/Users/Barbara/Documents")
+
+# xxxxxxxx
+
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
 # omdat het een ; separated value lijst is en niet komma. 
 dsCase <- read.csv2(file = "Data/SMT1920casus01.csv",
