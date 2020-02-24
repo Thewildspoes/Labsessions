@@ -6,7 +6,11 @@ setwd("/Users/amaniberkhof")
 
 setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
+<<<<<<< HEAD
 1111
+=======
+amani is lief
+>>>>>>> master
 
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
 # omdat het een ; separated value lijst is en niet komma. 
