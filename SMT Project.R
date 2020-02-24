@@ -1,3 +1,6 @@
+#------------------------------------------------------------------------------------
+# Instellen werkruimte en inlezen van de gegevens 
+#------------------------------------------------------------------------------------
 # Hier zetten we de working directory vast. Dit moet verandert worden als 
 # er een andere laptop gebruikt wordt. De working directories van iedereen worden
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
@@ -7,7 +10,7 @@ setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
 setwd("/Users/amaniberkhof/Documents/Labsessions")
 
-#setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
+setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
 setwd("C:/Users/Barbara/Documents")
 
@@ -25,10 +28,9 @@ View(dsCase)
 # install.packages("psych", dependencies = TRUE)
 library(psych)
 
-# dsCase["PreferAirplane"]
-# Checken hoeveel NA cases er zijn in PreferAirplane. 
-# colSums(is.na(dsCase, PreferAirplane))
-
+#------------------------------------------------------------------------------------
+# Constructie Likert-Schalen
+#------------------------------------------------------------------------------------
 # Eerst wordt er een overkoepelende term aangemaakt die Nep01 tot Nep05
 # samenvat zodat er niet continu de hele rij herschreven hoeft te worden.
 # Vervolgens wordt de Cronbach's Alpha berekend voor Environmental Beliefs (EnvironBelief). 
@@ -101,6 +103,29 @@ str(rsltPersonal)
 #barplot(avg01, main="Mean of RISK01 by group",
    #     ylab = "Mean", xlab = "Respondent group",
     #    las = 1)
+
+#------------------------------------------------------------------------------------
+# Beschrijvende Analyse 
+#------------------------------------------------------------------------------------
+
+
+
+#------------------------------------------------------------------------------------
+# Analyse Paarsgewijze Samenhangen
+#------------------------------------------------------------------------------------
+
+
+
+#------------------------------------------------------------------------------------
+# Doorkruisendheden en Interactie
+#------------------------------------------------------------------------------------
+
+
+
+#------------------------------------------------------------------------------------
+# Meervoudige Samenhang
+#------------------------------------------------------------------------------------
+
 
 
 
