@@ -6,7 +6,7 @@ setwd("/Users/amaniberkhof")
 
 setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
-
+1111
 
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
 # omdat het een ; separated value lijst is en niet komma. 
