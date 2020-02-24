@@ -24,9 +24,33 @@ View(dsCase)
 
 #Hier wordt het psych pakket eenmalig geinstalleerd. Door de installatie
 # van dit pakket kan men gemakkelijker functies berekenen die niet automatisch
-# in R studio zitten.
+# in R studio zitten. # moet weg voor "install.packages" wanneer je het pakket nog
+# moet instaleren. 
 # install.packages("psych", dependencies = TRUE)
 library(psych)
+
+# Hier wordt het ggplot2 pakket eenmalig geinstalleerd.
+# Wordt gebruikt om graphische weergaven te kunnen maken.
+# "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
+# install.packages("ggplot2", dependencies = TRUE)
+library(ggplot2)
+
+# Hier wordt het stargazer pakket eenmalig geinstalleerd.
+# "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
+# install.packages("stargazer", dependencies = TRUE)
+library(stargazer)
+
+# Hier wordt het gmodels pakket eenmalig geinstalleerd, wordt gebruikt voor
+# contingency models.
+#  "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
+# install.packages("gmodels", dependencies = TRUE)
+library(gmodels)
+
+# Hier wordt het Hmisc pakket eenmalig geinstalleerd.
+# Wordt gebruikt voor correlatie test informatie.
+# "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
+# install.packages("Hmisc", dependencies = TRUE)
+library(Hmisc)
 
 #------------------------------------------------------------------------------------
 # Constructie Likert-Schalen
