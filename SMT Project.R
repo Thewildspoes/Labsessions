@@ -1,5 +1,8 @@
-# hier zetten we de working directory vast. Dit moet verandert worden als 
-# er een andere laptop gebruikt wordt. 
+# Hier zetten we de working directory vast. Dit moet verandert worden als 
+# er een andere laptop gebruikt wordt. De working directories van iedereen worden
+# hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
+# Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
+# kan je uitzetten door voor "SetWD" een # te zetten. 
 setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
 setwd("/Users/amaniberkhof")
