@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------------
-# Instellen werkruimte en inlezen van de gegevens 
+# Instellen werkruimte en inlezen van gegevens en pakketten
 #------------------------------------------------------------------------------------
 # Hier zetten we de working directory vast. Dit moet verandert worden als 
 # er een andere laptop gebruikt wordt. De working directories van iedereen worden
@@ -112,21 +112,6 @@ dsCase$avgPersonal <- rsltPersonal$scores
 
 str(rsltPersonal)
 
-#dsCase$sumRisk <- alpha(dsCase[Personal], 
-#             keys = c("Big02", "Big04","Big06", "Big08", "Big10"), 
-#             cumulative = TRUE)$scores
-#dsCase$respGroup <-
-#  cut(dsCase$sumRisk,
- #     quantile(dsCase$sumRisk, probs = seq(0,1, by=0.2)),
-  #    labels = FALSE)
-#
-#avg01 <- tapply(dsCase$RISK01,
- #               dsCase$RespGroup, mean, na.rm= TRUE)
-#avg02 <- tapply (dsCase$RISK01, dsCase$respGroup, mean, na.rm= TRUE)
-
-#barplot(avg01, main="Mean of RISK01 by group",
-   #     ylab = "Mean", xlab = "Respondent group",
-    #    las = 1)
 
 #------------------------------------------------------------------------------------
 # Beschrijvende Analyse 
