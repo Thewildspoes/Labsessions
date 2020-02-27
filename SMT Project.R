@@ -8,11 +8,11 @@
 # kan je uitzetten door voor "SetWD" een # te zetten. 
 setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-setwd("/Users/amaniberkhof/Documents/Labsessions")
+#setwd("/Users/amaniberkhof/Documents/Labsessions")
 
-setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
+#setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
-setwd("C:/Users/Barbara/Documents")
+#setwd("C:/Users/Barbara/Documents")
 
 
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
@@ -190,6 +190,20 @@ describe(dsCase$ManipInfo)
 describe(dsCase$ManipTax)
 describe(dsCase$SchipholTrain)
 describe(dsCase$SchipholCar)
+
+ci_lower <- function(x, na.rm = FALSE) {
+  stats::quantile(x, 0.025, na.rm = na.rm)
+}
+ci_upper <- function(x, na.rm = FALSE) {
+  stats::quantile(x, 0.975, na.rm = na.rm)
+}
+
+ci_lower(dsCase$SchipholTrain, na.rm = FALSE)
+ci_upper(dsCase$SchipholTrain, na.rm = FALSE)
+
+ModeManipDest <- table(dsCase$ManipDest)
+names(ModeManipDest)[ModeManipDest==max(ModeManipDest)]
+
 #------------------------------------------------------------------------------------
 # Analyse Paarsgewijze Samenhangen
 #------------------------------------------------------------------------------------
