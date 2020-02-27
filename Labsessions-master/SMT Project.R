@@ -6,7 +6,7 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
 #setwd("/Users/amaniberkhof/Documents/Labsessions")
 
@@ -208,8 +208,17 @@ names(ModeManipDest)[ModeManipDest==max(ModeManipDest)]
 # Analyse Paarsgewijze Samenhangen
 #------------------------------------------------------------------------------------
 
-
-
+#Kwantitatief
+---------------------------------------------------------------------------------
+  
+#ImportComfort en RateAirplane 
+-------------------------------------------------------------------------------------
+# Base plot
+  ggplot(dsCase, aes(x=rateTrain, y=rateAirplane)) +
+  geom_point(col="blue") + ylab("Likelihood to take the airplane (rateAirplane)") +
+  xlab("Comfort is the most import element (rateTrain)")
+  
+  
 #------------------------------------------------------------------------------------
 # Doorkruisendheden en Interactie
 #------------------------------------------------------------------------------------
