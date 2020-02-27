@@ -52,6 +52,21 @@ library(gmodels)
 # install.packages("Hmisc", dependencies = TRUE)
 library(Hmisc)
 
+# Hier wordt het lmtest pakket eenmalig geinstalleerd.
+# Package lmtest for the durbinWatsonTest function
+# install.packages("lmtest", dependencies = TRUE)
+library(lmtest)
+
+# Hier wordt het lm.beta pakket eenmalig geinstalleerd.
+# Package lm.beta for standardized regression effects
+# coefficients with the lm.beta function
+install.packages("lm.beta", dependencies = TRUE)
+library(lm.beta)
+
+# Hier wordt het car pakket eenmalig geinstalleerd.
+# Package car for type III anova and regression related
+install.packages("car", dependencies = TRUE)
+library(car)
 #------------------------------------------------------------------------------------
 # Constructie Likert-Schalen
 #------------------------------------------------------------------------------------
@@ -83,7 +98,7 @@ psych::alpha(dsCase[Personal],
 # geeft str(rsltEnvironBelief) aan welke waarden er in rsltEnvironBelief zitten,
 # waaronder het gemiddelde.
 rsltEnvironBelief <-
-  alpha(dsCase[EnvironBelief],
+  psych::alpha(dsCase[EnvironBelief],
         keys = c("Nep01", "Nep05"),
         cumulative = FALSE)
 dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
@@ -94,7 +109,7 @@ str(rsltEnvironBelief)
 # geeft str(rsltGuiltFeel) aan welke waarden er in rsltGuiltFeel zitten, waaronder
 # het gemiddelde. 
 rsltGuiltFeel <-
-  alpha(dsCase[GuiltFeel],
+  psych::alpha(dsCase[GuiltFeel],
         keys = c("Guilt03", "Guilt04", "Guilt05"),
         cumulative = FALSE)
 dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
@@ -105,7 +120,7 @@ str(rsltGuiltFeel)
 # geeft str(rsltPersonal) aan welke waarden er in rsltPersonal zitten, waaronder
 # het gemiddelde.
 rsltPersonal <-
-  alpha(dsCase[Personal],
+  psych::alpha(dsCase[Personal],
         keys = c("Big01", "Big03", "Big07", "Big09"),
         cumulative = FALSE)
 dsCase$avgPersonal <- rsltPersonal$scores
@@ -127,7 +142,7 @@ mean(dsCase$SchipholCar)
 # Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
 # environmental beliefs.
 rsltEnvironBelief <-
-  alpha(dsCase[EnvironBelief],
+  psych::alpha(dsCase[EnvironBelief],
         keys = c("Nep01", "Nep05"),
         cumulative = FALSE)
 dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
@@ -136,7 +151,7 @@ str(rsltEnvironBelief)
 # Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
 # Guilt Feelings dus Schuldgevoel. 
 rsltGuiltFeel <-
-  alpha(dsCase[Personal],
+  psych::alpha(dsCase[Personal],
         keys = c("Guilt03", "Guilt04", "Guilt05"),
         cumulative = FALSE)
 dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
@@ -146,7 +161,7 @@ str(rsltGuiltFeel)
 # Personality dus Persoonlijkheid met uitzondering van Big05 en Big10 omdat 
 # Die eerder geelimineerd zijn. 
 rsltPersonal <-
-  alpha(dsCase[Personal],
+  psych::alpha(dsCase[Personal],
         keys = c("Big01", "Big03", "Big07", "Big09"),
         cumulative = FALSE)
 dsCase$avgPersonal <- rsltPersonal$scores
@@ -200,11 +215,38 @@ describe(dsCase$SchipholCar)
 #ImportComfort en RateAirplane 
 -------------------------------------------------------------------------------------
 # Base plot
-  ggplot(dsCase, aes(x=rateTrain, y=rateAirplane)) +
-  geom_point(col="blue") + ylab("Likelihood to take the airplane (rateAirplane)") +
-  xlab("Comfort is the most import element (rateTrain)")
-  
-  
+
+#ImportPrice en rateAirplane
+# Base plot
+ggplot(dsCase, aes(x=ImportPrice, y=rateAirplane)) +
+  geom_point(col="blue") +
+# Change the axis labels
+  ylab("Likelihood to take the airplane (rateAirplane)") +
+  xlab("Price is the most important element (ImportPrice)") +
+  # Extend the y-axis in order to have the following
+  # marker inside (and not outside) the plot
+  ylim(0,105) +
+  # Mark the outliers (if present)
+  geom_point(data=outliers, shape = 1, stroke = 1.5,
+             size = 10, colour="red") +
+  # Add regression line
+  geom_smooth(method = lm, col = "black", lwd = 1.0,
+            se = FALSE)
+ggplot(dsCase, aes(x=ImportPrice, y=rateAirplane)) +
+  geom_point(col="blue") + 
+  # Change the axis labels
+  ylab("Likelihood to take the airplane (rateAirplane)") +
+  xlab("Price is the most important element (ImportPrice)") + 
+  # Extend the y-axis in order to have the following
+  # marker inside (and not outside) the plot
+  ylim(0,105) +
+  # Mark the outliers (if present)
+  geom_point(data=outliers, shape = 1, stroke = 1.5,
+             size = 10, colour="red")
+
+outliers <-
+  dsCase[dsCase$ImportPrice > 80 & dsCase$rateAirplane > 80,
+         c("rateTrain","rateAirplane")]
 #------------------------------------------------------------------------------------
 # Doorkruisendheden en Interactie
 #------------------------------------------------------------------------------------
@@ -214,9 +256,30 @@ describe(dsCase$SchipholCar)
 #------------------------------------------------------------------------------------
 # Meervoudige Samenhang
 #------------------------------------------------------------------------------------
+# Maken van factoren
+dsCase$f.ManipDest <- factor(dsCase$ManipDest,labels=c("London", "Berlin", "Marseille"))
 
+dsCase$f.ManipInfo<- factor(dsCase$ManipInfo,labels=c("no", "yes"))
 
+dsCase$f.ManipTax<-factor(dsCase$ManipTax,labels=c("only price flight ticket", 
+                                                   "price flight ticket including low tax", 
+                                                   "price including high tax"))
 
+dsCase$f.SchipholCar <- factor(dsCase$SchipholCar,labels=c("<30", "30-45", 
+                                                           "45-60",">60", "no car"))
 
+dsCase$f.SchipholTrain<-factor(dsCase$SchipholTrain, labels=c("<30", "30-45", "45-60",">60"))
 
+# Regressie rateAirplane
+mdlA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
+  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
+  lm(mdlA, data=dsCase)
+  rsltA<- lm(mdlA, data=dsCase)
+# Overige verklarende variabelen 
+# Regressie CO2CompMax
+mdlC <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
+  Big01 + Big05 + ImportPrice + ManipTax
+  lm(mdlC, data=dsCase)
+  rsltC<- lm(mdlA, data=dsCase)
+# Overige verklarende variabelen 
 
