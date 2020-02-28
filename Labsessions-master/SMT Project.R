@@ -6,7 +6,7 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
 #setwd("/Users/amaniberkhof/Documents/Labsessions")
 
@@ -60,12 +60,12 @@ library(lmtest)
 # Hier wordt het lm.beta pakket eenmalig geinstalleerd.
 # Package lm.beta for standardized regression effects
 # coefficients with the lm.beta function
-install.packages("lm.beta", dependencies = TRUE)
+# install.packages("lm.beta", dependencies = TRUE)
 library(lm.beta)
 
 # Hier wordt het car pakket eenmalig geinstalleerd.
 # Package car for type III anova and regression related
-install.packages("car", dependencies = TRUE)
+# install.packages("car", dependencies = TRUE)
 library(car)
 #------------------------------------------------------------------------------------
 # Constructie Likert-Schalen
@@ -131,59 +131,22 @@ str(rsltPersonal)
 #------------------------------------------------------------------------------------
 # Beschrijvende Analyse 
 #------------------------------------------------------------------------------------
-# Hier wordt de mean voor ManipDest / ManipInfo / ManipTax / Schiphol Train en
-# SchipholCar gegeven.  
-mean(dsCase$ManipDest)
-mean(dsCase$ManipInfo)
-mean(dsCase$ManipTax)
-mean(dsCase$SchipholTrain)
-mean(dsCase$SchipholCar)
+# de Tabel wordt hier aangemaakt
+tbl <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
+                          "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
+                          "avgPersonal")], skew=FALSE)
+print(tbl, digits=3)
 
-# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
-# environmental beliefs.
-rsltEnvironBelief <-
-  psych::alpha(dsCase[EnvironBelief],
-        keys = c("Nep01", "Nep05"),
-        cumulative = FALSE)
-dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
-str(rsltEnvironBelief)
+# Dit stuk code zorgt ervoor dat de net aangemaakte tabel wordt geexporteert. 
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+VarsBA <- c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
+            "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
+            "avgPersonal")
 
-# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
-# Guilt Feelings dus Schuldgevoel. 
-rsltGuiltFeel <-
-  psych::alpha(dsCase[Personal],
-        keys = c("Guilt03", "Guilt04", "Guilt05"),
-        cumulative = FALSE)
-dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
-str(rsltGuiltFeel)
+library(stargazer)
+stargazer(dsCase[VarsBA], type="html", out="Tabel_BeschrijvendeAnalyse.doc")
 
-# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
-# Personality dus Persoonlijkheid met uitzondering van Big05 en Big10 omdat 
-# Die eerder geelimineerd zijn. 
-rsltPersonal <-
-  psych::alpha(dsCase[Personal],
-        keys = c("Big01", "Big03", "Big07", "Big09"),
-        cumulative = FALSE)
-dsCase$avgPersonal <- rsltPersonal$scores
-str(rsltPersonal)
-
-# Hier wordt de standaard deviatie berekent voor ManipDest / ManipInfo / ManipTax / 
-# Schiphol Train en SchipholCar / Alle items van NEP / Alle items van GuiltFeel
-# en alle items van Personality.
-sd(dsCase$ManipDest)
-sd(dsCase$ManipInfo)
-sd(dsCase$ManipTax)
-sd(dsCase$SchipholTrain)
-sd(dsCase$SchipholCar)
-sd(dsCase$Nep01, dsCase$Nep02, dsCase$Nep03, dsCase$Nep04, dsCase$Nep05,
-       na.rm = TRUE)
-sd(dsCase$Guilt01, dsCase$Guilt02, dsCase$Guilt03, dsCase$Guilt04, 
-       dsCase$Guilt05, na.rm = TRUE)
-sd(dsCase$Big01, dsCase$Big02, dsCase$Big03, dsCase$Big04, dsCase$Big06,
-       dsCase$Big07, dsCase$Big08, dsCase$Big09, na.rm = TRUE)
-
-
-# Hier wordt de smediaan berekent voor ManipDest / ManipInfo / ManipTax / 
+# Hier wordt de mediaan berekent voor ManipDest / ManipInfo / ManipTax / 
 # Schiphol Train / SchipholCar / Alle items van NEP / Alle items van GuiltFeel
 # en alle items van Personality.
 median(dsCase$ManipDest)
@@ -198,26 +161,52 @@ median(dsCase$Guilt01, dsCase$Guilt02, dsCase$Guilt03, dsCase$Guilt04,
 median(dsCase$Big01, dsCase$Big02, dsCase$Big03, dsCase$Big04, dsCase$Big06,
        dsCase$Big07, dsCase$Big08, dsCase$Big09, na.rm = TRUE)
 
-# Hier kan je de N vinden van ManipDest / ManipInfo / ManipTax / 
-# Schiphol Train en SchipholCar.
-describe(dsCase$ManipDest)
-describe(dsCase$ManipInfo)
-describe(dsCase$ManipTax)
-describe(dsCase$SchipholTrain)
-describe(dsCase$SchipholCar)
-
-ci_lower <- function(x, na.rm = FALSE) {
-  stats::quantile(x, 0.025, na.rm = na.rm)
-}
-ci_upper <- function(x, na.rm = FALSE) {
-  stats::quantile(x, 0.975, na.rm = na.rm)
-}
-
-ci_lower(dsCase$SchipholTrain, na.rm = FALSE)
-ci_upper(dsCase$SchipholTrain, na.rm = FALSE)
-
+# Hier worden de waarden van de Modus berekent per kwantitatieve variabele.
 ModeManipDest <- table(dsCase$ManipDest)
 names(ModeManipDest)[ModeManipDest==max(ModeManipDest)]
+
+ModeManipInfo <- table(dsCase$ManipInfo)
+names(ModeManipInfo)[ModeManipInfo==max(ModeManipInfo)]
+
+ModeManipTax <- table(dsCase$ManipTax)
+names(ModeManipTax)[ModeManipTax==max(ModeManipTax)]
+
+ModeSchipholTrain <- table(dsCase$SchipholTrain)
+names(ModeSchipholTrain)[ModeSchipholTrain==max(ModeSchipholTrain)]
+
+ModeSchipholCar <- table(dsCase$SchipholCar)
+names(ModeSchipholCar)[ModeSchipholCar==max(ModeSchipholCar)]
+
+ModeavgEnvironBelief <- table(dsCase$avgEnvironBelief )
+names(ModeavgEnvironBelief )[ModeavgEnvironBelief==max(ModeavgEnvironBelief )]
+
+ModeavgGuiltFeel <- table(dsCase$avgGuiltFeel)
+names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
+
+ModeavgPersonal <- table(dsCase$avgPersonal)
+names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
+
+#------------------------------------------------------------------------------------
+# In dit stuk code wordt een intervalschatting gemaakt voor de kwantitatieve var.
+# Hier worden alle kwantitatieve variabelen gepakt
+tbl<-tbl[, c(2:4)]
+alpha<- 0.05
+tbl$t_crit <- qt(1 - alpha/2, tbl$n - 1)
+
+# De upper en lower bound worden aangemaakt.
+tbl$CI_low <- tbl$mean - tbl$t_crit*tbl$sd/sqrt(tbl$n)
+tbl$CI_upp <- tbl$mean + tbl$t_crit*tbl$sd/sqrt(tbl$n)
+
+
+#De tabel wordt geexporteerd als CSV file. 
+library(stargazer)
+tbl <- psych::describe(dsCase[VarsBA], skew = FALSE, ranges = FALSE)
+write.csv2(tbl, file = "Interval_BA.csv")
+
+#------------------------------------------------------------------------------------
+# In het volgende stuk code wordt de uitbijteranalyse opgezet.
+
+
 
 #------------------------------------------------------------------------------------
 # Analyse Paarsgewijze Samenhangen
