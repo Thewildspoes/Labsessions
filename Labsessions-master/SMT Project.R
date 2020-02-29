@@ -207,82 +207,87 @@ write.csv2(tbl, file = "Interval_BA.csv")
 # In het volgende stuk code wordt de uitbijteranalyse opgezet.
 
 
-
 #------------------------------------------------------------------------------------
 # Analyse Paarsgewijze Samenhangen
 #------------------------------------------------------------------------------------
 
-#Kwantitatief
----------------------------------------------------------------------------------
+# Kwantitatief
+-------------------------------------------------------------------------------------
   
-#ImportComfort en RateAirplane 
+# Hier wordt wat gedaan met ImportComfort en RateAirplane  ????????????????????????????????????
 -------------------------------------------------------------------------------------
 # Base plot
 
 #ImportPrice en rateAirplane
-# Base plot
-ggplot(dsCase, aes(x=ImportPrice, y=rateAirplane)) +
-  geom_point(col="blue") +
-# Change the axis labels
-  ylab("Likelihood to take the airplane (rateAirplane)") +
-  xlab("Price is the most important element (ImportPrice)") +
-  # Extend the y-axis in order to have the following
-  # marker inside (and not outside) the plot
-  ylim(0,105) +
-  # Mark the outliers (if present)
-  geom_point(data=outliers, shape = 1, stroke = 1.5,
-             size = 10, colour="red") +
-  # Add regression line
-  geom_smooth(method = lm, col = "black", lwd = 1.0,
-            se = FALSE)
-ggplot(dsCase, aes(x=ImportPrice, y=rateAirplane)) +
-  geom_point(col="blue") + 
-  # Change the axis labels
-  ylab("Likelihood to take the airplane (rateAirplane)") +
-  xlab("Price is the most important element (ImportPrice)") + 
-  # Extend the y-axis in order to have the following
-  # marker inside (and not outside) the plot
-  ylim(0,105) +
-  # Mark the outliers (if present)
-  geom_point(data=outliers, shape = 1, stroke = 1.5,
-             size = 10, colour="red")
+#Base plot
+# Deze gekke modus berekening uit de bschrijvende analyse doet het niet maar zorgt ervoor
+# dat NewBoxPlot het wel doet... Ligt aan de interne code, vraag me niet waarom. 
+ModeSchipholTrain <- table(dsCase$SchipholTrain)
+names(ModeSchipholTrain)[ModeSchipholTrain==max(ModeSchipholTrain)]
 
-outliers <-
-  dsCase[dsCase$ImportPrice > 80 & dsCase$rateAirplane > 80,
-         c("rateTrain","rateAirplane")]
+outliers <-dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane > 80,
+                  c("ImportPrice","rateAirplane")]
+outliers
+  
+NewBoxPlot <- ggplot2:: ggplot(data.frame(dsCase$ImportPrice, dsCase$rateAirplane), 
+                 ggplot2::aes(x=dsCase$ImportPrice, y=dsCase$rateAirplane)) +
+             ggplot2:: geom_point(col = "blue") +
+             ggplot2:: labs(title = "Kies hier een leuke titel")
+
+NewBoxPlot + ggplot2:: xlab("ImportPrice") +
+             ggplot2:: ylab("rateAirplane") +
+             ggplot2:: ylim(0,105) +
+             ggplot2:: xlim(0,105) +
+             ggplot2:: geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) 
+            # ggplot2:: geom_point(data = outliers, shape = 1, stroke = 1.5,
+                                #  size = 10, colour="red")
+# NewBoxPlot < ggplot2:: geom_point(data = outliers, colour="red")
+
+# ggsave(paste0(dirRslt, "geom_point_Scatter02.pdf"))         
 #------------------------------------------------------------------------------------
 # Doorkruisendheden en Interactie
 #------------------------------------------------------------------------------------
 
+# Lu en Iris nog aan werken. 
 
 
 #------------------------------------------------------------------------------------
 # Meervoudige Samenhang
 #------------------------------------------------------------------------------------
-# Maken van factoren
-dsCase$f.ManipDest <- factor(dsCase$ManipDest,labels=c("London", "Berlin", "Marseille"))
+# Factoren aanmaken
+# In de eerste FacManip... gaat er altijd iets fout, onafhankelijk van de factor die je als eerste noemt.
+# Dit ligt aan de interne code in R en dus niet aan ons. 
+FacManipInfo <- factor(dsCase$ManipInfo,labels=c("Yes", "No"))
+levels(FacManipInfo)
 
-dsCase$f.ManipInfo<- factor(dsCase$ManipInfo,labels=c("no", "yes"))
-
-dsCase$f.ManipTax<-factor(dsCase$ManipTax,labels=c("only price flight ticket", 
+FacManipTax <- factor(dsCase$ManipTax,labels=c("only price flight ticket", 
                                                    "price flight ticket including low tax", 
                                                    "price including high tax"))
+levels(FacManipTax)
 
-dsCase$f.SchipholCar <- factor(dsCase$SchipholCar,labels=c("<30", "30-45", 
+FacSchipholCar <- factor(dsCase$SchipholCar,labels=c("<30", "30-45", 
                                                            "45-60",">60", "no car"))
+levels(FacSchipholCar)
 
-dsCase$f.SchipholTrain<-factor(dsCase$SchipholTrain, labels=c("<30", "30-45", "45-60",">60"))
+FacSchipholTrain<-factor(dsCase$SchipholTrain, labels=c("<30", "30-45", "45-60",">60"))
+levels(FacSchipholTrain)
 
-# Regressie rateAirplane
-mdlA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
+FacManipDest <- factor(dsCase$ManipDest, labels=c("Berlin", "London", "Marseille"))
+levels(FacManipDest)
+
+#------------------------------------------------------------------------------------
+# Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
+# Regressie rateAirplane 
+ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
   ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
-  lm(mdlA, data=dsCase)
-  rsltA<- lm(mdlA, data=dsCase)
-# Overige verklarende variabelen 
+  lm(ModelA, data=dsCase)
+  rsltA<- lm(ModelA, data=dsCase)
+
 # Regressie CO2CompMax
-mdlC <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
+ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
   Big01 + Big05 + ImportPrice + ManipTax
-  lm(mdlC, data=dsCase)
-  rsltC<- lm(mdlA, data=dsCase)
-# Overige verklarende variabelen 
+  lm(ModelB, data=dsCase)
+  rsltC<- lm(ModelB, data=dsCase)
+
+# Regressie ...................
 
