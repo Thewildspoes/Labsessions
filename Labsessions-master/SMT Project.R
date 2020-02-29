@@ -186,11 +186,10 @@ names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
 ModeavgPersonal <- table(dsCase$avgPersonal)
 names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
 
-#------------------------------------------------------------------------------------
 # In dit stuk code wordt een intervalschatting gemaakt voor de kwantitatieve var.
 # Hier worden alle kwantitatieve variabelen gepakt
-tbl<-tbl[, c(2:4)]
-alpha<- 0.05
+tbl <- tbl[, c(2:4)]
+alpha <- 0.05
 tbl$t_crit <- qt(1 - alpha/2, tbl$n - 1)
 
 # De upper en lower bound worden aangemaakt.
@@ -203,7 +202,6 @@ library(stargazer)
 tbl <- psych::describe(dsCase[VarsBA], skew = FALSE, ranges = FALSE)
 write.csv2(tbl, file = "Interval_BA.csv")
 
-#------------------------------------------------------------------------------------
 # In het volgende stuk code wordt de uitbijteranalyse opgezet.
 
 
@@ -216,34 +214,29 @@ write.csv2(tbl, file = "Interval_BA.csv")
   
 # Hier wordt wat gedaan met ImportComfort en RateAirplane  ????????????????????????????????????
 -------------------------------------------------------------------------------------
-# Base plot
-
-#ImportPrice en rateAirplane
-#Base plot
+# Base plot van ImportPrice en rateAirplane
 # Deze gekke modus berekening uit de bschrijvende analyse doet het niet maar zorgt ervoor
 # dat NewBoxPlot het wel doet... Ligt aan de interne code, vraag me niet waarom. 
 ModeSchipholTrain <- table(dsCase$SchipholTrain)
 names(ModeSchipholTrain)[ModeSchipholTrain==max(ModeSchipholTrain)]
 
-outliers <-dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane > 80,
-                  c("ImportPrice","rateAirplane")]
-outliers
-  
-NewBoxPlot <- ggplot2:: ggplot(data.frame(dsCase$ImportPrice, dsCase$rateAirplane), 
-                 ggplot2::aes(x=dsCase$ImportPrice, y=dsCase$rateAirplane)) +
-             ggplot2:: geom_point(col = "blue") +
-             ggplot2:: labs(title = "Kies hier een leuke titel")
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
+                   c("ImportPrice","rateAirplane")]
 
-NewBoxPlot + ggplot2:: xlab("ImportPrice") +
-             ggplot2:: ylab("rateAirplane") +
-             ggplot2:: ylim(0,105) +
-             ggplot2:: xlim(0,105) +
-             ggplot2:: geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) 
-            # ggplot2:: geom_point(data = outliers, shape = 1, stroke = 1.5,
-                                #  size = 10, colour="red")
-# NewBoxPlot < ggplot2:: geom_point(data = outliers, colour="red")
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
+                ggplot2::geom_point(col="blue") +
+                ggplot2::labs(title = "titel") +
+                ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                                     size = 10, colour="red") +
+                ggplot2::ylim(0,105) +
+                ggplot2::xlim(0,105) +
+                ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+                ggplot2::geom_density_2d(col = "magenta")
 
-# ggsave(paste0(dirRslt, "geom_point_Scatter02.pdf"))         
+# ggplot opslaan.
+ggplot2::ggsave(paste0("baseplot_1.pdf"))         
 #------------------------------------------------------------------------------------
 # Doorkruisendheden en Interactie
 #------------------------------------------------------------------------------------
