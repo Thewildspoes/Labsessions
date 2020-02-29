@@ -67,9 +67,10 @@ library(lm.beta)
 # Package car for type III anova and regression related
 # install.packages("car", dependencies = TRUE)
 library(car)
-#------------------------------------------------------------------------------------
-# Constructie Likert-Schalen
-#------------------------------------------------------------------------------------
+
+#----------------------------------
+# CONSTRUCTIE LIKERT-SCHALEN
+#----------------------------------
 # Eerst wordt er een overkoepelende term aangemaakt die Nep01 tot Nep05
 # samenvat zodat er niet continu de hele rij herschreven hoeft te worden.
 # Vervolgens wordt de Cronbach's Alpha berekend voor Environmental Beliefs (EnvironBelief). 
@@ -127,10 +128,9 @@ dsCase$avgPersonal <- rsltPersonal$scores
 
 str(rsltPersonal)
 
-
-#------------------------------------------------------------------------------------
-# Beschrijvende Analyse 
-#------------------------------------------------------------------------------------
+#----------------------------------
+# BESCHRIJVENDE ANALYSE 
+#----------------------------------
 # de Tabel wordt hier aangemaakt
 tbl <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
                           "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
@@ -186,7 +186,9 @@ names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
 ModeavgPersonal <- table(dsCase$avgPersonal)
 names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
 
-# In dit stuk code wordt een intervalschatting gemaakt voor de kwantitatieve var.
+#----------------------------------
+# INTERVALSCHATTING
+#----------------------------------
 # Hier worden alle kwantitatieve variabelen gepakt
 tbl <- tbl[, c(2:4)]
 alpha <- 0.05
@@ -202,27 +204,26 @@ library(stargazer)
 tbl <- psych::describe(dsCase[VarsBA], skew = FALSE, ranges = FALSE)
 write.csv2(tbl, file = "Interval_BA.csv")
 
-# In het volgende stuk code wordt de uitbijteranalyse opgezet.
+#----------------------------------
+# UITBIJTERANALYSE
+#----------------------------------
 
 
-#------------------------------------------------------------------------------------
-# Analyse Paarsgewijze Samenhangen
-#------------------------------------------------------------------------------------
+#----------------------------------
+# ANALYSE PAARSGEWIJZE SAMENHANG
+#----------------------------------
 
-# Kwantitatief
--------------------------------------------------------------------------------------
-  
+#----------------------------------
+# KWANTITATIEF
+# ---------------------------------
+
 # Hier wordt wat gedaan met ImportComfort en RateAirplane  ????????????????????????????????????
--------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 # Base plot van ImportPrice en rateAirplane
-# Deze gekke modus berekening uit de bschrijvende analyse doet het niet maar zorgt ervoor
-# dat NewBoxPlot het wel doet... Ligt aan de interne code, vraag me niet waarom. 
-ModeSchipholTrain <- table(dsCase$SchipholTrain)
-names(ModeSchipholTrain)[ModeSchipholTrain==max(ModeSchipholTrain)]
-
 # Outliers aanmaken. 
 outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
                    c("ImportPrice","rateAirplane")]
+outliers
 
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
@@ -237,19 +238,16 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("baseplot_1.pdf"))         
-#------------------------------------------------------------------------------------
-# Doorkruisendheden en Interactie
-#------------------------------------------------------------------------------------
-
+#-----------------------------------
+# DOORKRUISENDHEDEN EN INTERACTIES
+#-----------------------------------
 # Lu en Iris nog aan werken. 
 
 
-#------------------------------------------------------------------------------------
-# Meervoudige Samenhang
-#------------------------------------------------------------------------------------
+#-----------------------
+# MEERVOUDIGE SAMENHANG
+#-----------------------
 # Factoren aanmaken
-# In de eerste FacManip... gaat er altijd iets fout, onafhankelijk van de factor die je als eerste noemt.
-# Dit ligt aan de interne code in R en dus niet aan ons. 
 FacManipInfo <- factor(dsCase$ManipInfo,labels=c("Yes", "No"))
 levels(FacManipInfo)
 
@@ -282,5 +280,7 @@ ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel +
   lm(ModelB, data=dsCase)
   rsltC<- lm(ModelB, data=dsCase)
 
-# Regressie ...................
+#----------------------------------
+# REGRESSIE ANALYSE
+#----------------------------------
 
