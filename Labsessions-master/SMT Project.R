@@ -6,9 +6,9 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-setwd("/Users/amaniberkhof/Documents/Labsessions")
+# setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
@@ -216,20 +216,28 @@ write.csv2(tbl, file = "Interval_BA.csv")
 #----------------------------------
 # KWANTITATIEF
 # ---------------------------------
+# NA variabelen in ImportTime/ImportComfort/NEP02/
+# identificeren en vervangen voor afgerond gemiddelde van die kolom.
+colSums(is.na(dsCase))
+dsCase$ImportTime[is.na(dsCase$ImportTime)] <-
+  round(mean(dsCase$ImportTime, na.rm=TRUE))
+dsCase$ImportComfort[is.na(dsCase$ImportComfort)] <-
+  round(mean(dsCase$ImportComfort, na.rm=TRUE))
+dsCase$Nep02[is.na(dsVase$Nep02)] <-
+  round(median(dsCase$avgEnvironBelief, na.rm = TRUE))
 
-# Hier wordt wat gedaan met ImportComfort en RateAirplane  ????????????????????????????????????
-# -------------------------------------------------------------------------------------
-# Base plot van ImportComfort en rateAirplane
-# Outliers aanmaken. 
-outliers <- dsCase[dsCase$ImportComfort < 40 & dsCase$rateAirplane < 40,
+# BASEPLOT
+# -----------
+# Outliers aanmaken van ImportComfort en rateAirplane 
+outliersICRA <- dsCase[dsCase$ImportComfort > 80 & dsCase$rateAirplane > 80,
                    c("ImportComfort","rateAirplane")]
-outliers
+outliersICRA
 
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
                 ggplot2::geom_point(col="blue") +
                 ggplot2::labs(title = "titel") +
-                ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                ggplot2::geom_point(data=outliersICRA, shape = 1, stroke = 1.5,
                                      size = 10, colour="red") +
                 ggplot2::ylim(0,105) +
                 ggplot2::xlim(0,105) +
@@ -239,38 +247,79 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
 # ggplot opslaan.
 ggplot2::ggsave(paste0("baseplot_1.pdf"))    
 
-# Pearsons correlatiecoëfficiënt berekenen 
---------------------------------------------------------
-# rateAirplane en ImportComfort
+# PEARSONS CORRELATIECOËFFICIËNT BEREKEN
+# --------------------------------------------------------
+# RATEAIRPLANE EN IMPORTCOMFORT
+# --------------------------------------------------
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
   ggplot2::labs(title = "titel") +
-  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+  ggplot2::geom_point(data=outliersICRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
   ggplot2::xlim(0,105) +
   ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
   ggplot2::geom_density_2d(col = "magenta")
 
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_ICRA.pdf")) 
+
 # Uitvoeren correlatie
 dsSub <- subset(dsCase,
-                select=c("rateAirplane", "ImportComfort"))
+                select=c("ImportComfort", "rateAirplane"))
 
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
-# rateAirplane en ImportPrice
+# RATEAIRPLANE EN IMPORTPRICE
+# --------------------------------------------------
+# Outliers van rateAirplane en ImportPrice
+outliersIPRA <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
+                       c("ImportPrice","rateAirplane")]
+outliersIPRA
+
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
   ggplot2::labs(title = "titel") +
-  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+  ggplot2::geom_point(data=outliersIPRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
   ggplot2::xlim(0,105) +
   ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
   ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_IPRA.pdf")) 
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("ImportPrice", "rateAirplane"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# RATEAIRPLANE & IMPORTTIME
+# --------------------------------------------------
+# Outliers aanmaken voor rateAirplane en ImportTime
+outliersITRA <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
+                       c("ImportTime","rateAirplane")]
+outliersITRA
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersITRA, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_ITRA.pdf")) 
 
 # Uitvoeren correlatie
 dsSub <- subset(dsCase,
@@ -279,44 +328,214 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
-# rateAirplane en ImportTime
+# RATEAIRPLANE EN NEP (ENVIRONBELIEF)
+# --------------------------------------------------
+# Outliers aanmaken voor rateAirplane en NEP (EnvironBelief)
+outliersEBRA <- dsCase[dsCase$avgEnvironBelief & dsCase$rateAirplane < 40,
+                       c("avgEnvironBelief","rateAirplane")]
+outliersEBRA
+
 # ggplot aanmaken met lijn, outliers en density weergave.
-ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
+ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
   ggplot2::labs(title = "titel") +
-  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+  ggplot2::geom_point(data=outliersEBRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
-  ggplot2::xlim(0,105) +
+  ggplot2::xlim(0,6.5) +
   ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
   ggplot2::geom_density_2d(col = "magenta")
 
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_EBRA.pdf")) 
+
 # Uitvoeren correlatie
 dsSub <- subset(dsCase,
-                select=c("rateAirplane", "ImportTime"))
+                select=c("avgEnvironBelief", "rateAirplane"))
 
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
-#alle onderstaande variabelen betreffen pearsons correlatiecoefficient werken niet, 
-#ook ggplot niet.
+# GUILT (GUILTFEEL) EN NEP (ENVIRONBELIEF)
+# --------------------------------------------------
+# Outliers aanmaken voor Guilt (GuiltFeel) en NEP (EnvironBelief)
 
-#rateAirplane en Nep
+geom_sm
 
-#Guilt en Nep
+outliersGFEB <- dsCase[dsCase$avgGuiltFeel < 2 & dsCase$avgEnvironBelief < 2,
+                       c("avgGuiltFeel","avgEnvironBelief")]
+outliersGFEB
 
-#Nep en CO2CompMax
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=avgEnvironBelief)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersGFEB, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,6.5) +
+  ggplot2::xlim(0,5) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
 
-#Guilt en CO2CompMax
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_GFEB.pdf")) 
 
-#Big en CO2CompMax
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("avgGuiltFeel", "avgEnvironBelief"))
 
-#Big en Guilt
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
-#CO2CompMax en ImportPrice
+# NEP (ENVIRONBELIEF) EN CO2COMPMAX
+# --------------------------------------------------
+# Outliers aanmaken voor NEP (EnvironBelief) en CO2CompMax
+# Er zijn 10 values van kleiner dan 5 en groter dan 100 die buiten de GGplot liggen
+# dit zijn natuurlijk absolute uitbijters.
+outliersEBCO2 <- dsCase[dsCase$avgEnvironBelief < 5 & dsCase$CO2CompMax >= 50,
+                       c("avgEnvironBelief","CO2CompMax")]
+outliersEBCO2
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=CO2CompMax)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersEBCO2, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,55) +
+  ggplot2::xlim(0,7.5) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_EBCO2.pdf")) 
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("avgEnvironBelief", "CO2CompMax"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# GUILT (GUILTFEEL) EN CO2COMPMAX
+# --------------------------------------------------
+# Outliers aanmaken voor GuiltFeel en CO2CompMax
+
+outliersGFCO2 <- dsCase[dsCase$avgGuiltFeel < 5 & dsCase$CO2CompMax >= 50,
+                       c("avgGuiltFeel","CO2CompMax")]
+outliersGFCO2
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=CO2CompMax)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersGFCO2, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,55) +
+  ggplot2::xlim(0,7) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_GFCO2.pdf")) 
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("avgGuiltFeel", "CO2CompMax"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# BIG (PERSONAL) EN CO2COMPMAX
+# --------------------------------------------------
+# Outliers aanmaken voor Personal en CO2CompMax
+
+outliersPSCO2 <- dsCase[dsCase$avgPersonal < 6 & dsCase$CO2CompMax > 40,
+                       c("avgPersonal","CO2CompMax")]
+outliersPSCO2
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=CO2CompMax)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersPSCO2, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,55) +
+  ggplot2::xlim(1.9,5) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_PSCO2.pdf")) 
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("avgPersonal", "CO2CompMax"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# BIG (PERSONAL) EN GUILT (GUITLFEEL)
+# --------------------------------------------------
+# Outliers aanmaken voor Personal en GuiltFeel
+
+outliersPSGF <- dsCase[dsCase$avgPersonal < 2 & dsCase$avgGuiltFeel < 40,
+                       c("avgPersonal","avgGuiltFeel")]
+outliersPSGF
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=avgGuiltFeel)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersPSGF, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0.5,5) +
+  ggplot2::xlim(2,5) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_PSGF.pdf")) 
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("avgPersonal", "avgGuiltFeel"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# CO2COMPMAX EN IMPORTPRICE 
+# --------------------------------------------------
+# Outliers aanmaken voor CO2CompMax en ImportPrice
+colSums(is.na(dsCase))
+outliersIPCO2 <- dsCase[dsCase$CO2CompMax > 40 & dsCase$ImportPrice < 40,
+                       c("CO2CompMax","ImportPrice")]
+outliersIPCO2
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliersIPCO2, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,55) +
+  ggplot2::xlim(0,100) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("Plot_IPCO2.pdf")) 
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("ImportPrice", "CO2CompMax"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
 
-#T-toets berekenen
+#T-TOETS BEREKENEN
+# ------------------------------------------------------------
 psych::describe(dsSub$rateAirplane, skew = FALSE, ranges = FALSE)
 psych::describeBy(dsSub$rateAirplane, group=dsSub$ManipDest, skew=FALSE, range=FALSE)
 
@@ -368,7 +587,7 @@ ggplot(dsCase, aes(x =ManipInfo, y=rateAirplane)) +
 #ManipTax en CO2CompMax
 #ManipInfo en Import
   
-  # Base plot van ImportTime en rateAirplane
+# Base plot van ImportTime en rateAirplane
 # Outliers aanmaken. 
 outliers <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
                    c("ImportTime","rateAirplane")]
