@@ -6,9 +6,9 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-#setwd("/Users/amaniberkhof/Documents/Labsessions")
+setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
@@ -219,14 +219,14 @@ write.csv2(tbl, file = "Interval_BA.csv")
 
 # Hier wordt wat gedaan met ImportComfort en RateAirplane  ????????????????????????????????????
 # -------------------------------------------------------------------------------------
-# Base plot van ImportPrice en rateAirplane
+# Base plot van ImportComfort en rateAirplane
 # Outliers aanmaken. 
-outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
-                   c("ImportPrice","rateAirplane")]
+outliers <- dsCase[dsCase$ImportComfort < 40 & dsCase$rateAirplane < 40,
+                   c("ImportComfort","rateAirplane")]
 outliers
 
 # ggplot aanmaken met lijn, outliers en density weergave.
-ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
                 ggplot2::geom_point(col="blue") +
                 ggplot2::labs(title = "titel") +
                 ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
@@ -237,7 +237,61 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
                 ggplot2::geom_density_2d(col = "magenta")
 
 # ggplot opslaan.
-ggplot2::ggsave(paste0("baseplot_1.pdf"))         
+ggplot2::ggsave(paste0("baseplot_1.pdf"))     
+
+
+# Base plot van ImportTime en rateAirplane
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
+                   c("ImportTime","rateAirplane")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Base plot van ImportPrice en rateAirplane
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
+                   c("ImportPrice","rateAirplane")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Base plot van ImportPrice en CO2CompMax DIT LUKT NIET
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$CO2CompMax > 30,
+                   c("ImportPrice","CO2CompMax")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+
 #-----------------------------------
 # DOORKRUISENDHEDEN EN INTERACTIES
 #-----------------------------------
