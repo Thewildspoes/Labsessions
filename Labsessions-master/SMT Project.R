@@ -26,7 +26,7 @@ View(dsCase)
 # van dit pakket kan men gemakkelijker functies berekenen die niet automatisch
 # in R studio zitten. # moet weg voor "install.packages" wanneer je het pakket nog
 # moet instaleren. 
-# install.packages("psych", dependencies = TRUE)
+#install.packages("psych", dependencies = TRUE)
 library(psych)
 
 # Hier wordt het ggplot2 pakket eenmalig geinstalleerd.
@@ -49,7 +49,7 @@ library(gmodels)
 # Hier wordt het Hmisc pakket eenmalig geinstalleerd.
 # Wordt gebruikt voor correlatie test informatie.
 # "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
-# install.packages("Hmisc", dependencies = TRUE)
+#install.packages("Hmisc", dependencies = TRUE)
 library(Hmisc)
 
 # Hier wordt het lmtest pakket eenmalig geinstalleerd.
@@ -237,10 +237,138 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
                 ggplot2::geom_density_2d(col = "magenta")
 
 # ggplot opslaan.
-ggplot2::ggsave(paste0("baseplot_1.pdf"))     
+ggplot2::ggsave(paste0("baseplot_1.pdf"))    
+
+# Pearsons correlatiecoëfficiënt berekenen 
+--------------------------------------------------------
+# rateAirplane en ImportComfort
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("rateAirplane", "ImportComfort"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# rateAirplane en ImportPrice
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("rateAirplane", "ImportPrice"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+# rateAirplane en ImportTime
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Uitvoeren correlatie
+dsSub <- subset(dsCase,
+                select=c("rateAirplane", "ImportTime"))
+
+Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+#alle onderstaande variabelen betreffen pearsons correlatiecoefficient werken niet, 
+#ook ggplot niet.
+
+#rateAirplane en Nep
+
+#Guilt en Nep
+
+#Nep en CO2CompMax
+
+#Guilt en CO2CompMax
+
+#Big en CO2CompMax
+
+#Big en Guilt
+
+#CO2CompMax en ImportPrice
 
 
-# Base plot van ImportTime en rateAirplane
+#T-toets berekenen
+psych::describe(dsSub$rateAirplane, skew = FALSE, ranges = FALSE)
+psych::describeBy(dsSub$rateAirplane, group=dsSub$ManipDest, skew=FALSE, range=FALSE)
+
+tmp <- psych::describeBy(dsSub$rateAirplane, group=dsSub$ManipDest,
+                  skew=FALSE, range = FALSE)
+utils::str(tmp)
+rbind(
+  as.data.frame(tmp$"1"),
+  as.data.frame(tmp$"2")
+
+
+#One-Way anova
+#ManipInfo en rateAirplane
+# Histogram
+ggplot(dsCase, aes(x = rateAirplane)) +
+  geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  xlab("Intentie om het contract te accepteren") +
+  facet_grid(~ ManipInfo)
+
+ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane)) +
+  geom_point(col = "black") +
+  ylab("waarschijnlijkheid reizen met vliegtuig") +
+  xlab("aanwezigheid van informatie")
+
+# Boxplot
+ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane,
+                   fill = ManipInfo)) +
+  geom_boxplot(col = "black") +
+  ylab("waarschijnlijkheid reizen met vliegtuig") +
+  xlab("aanwezigheid van informatie")
+
+ggsave(paste0(dirRslt, "gg_anovaHistogram.pdf"))
+
+# ggplot
+ggplot(dsCase, aes(x =ManipInfo, y=rateAirplane)) +
+  geom_point(col = "black") +
+  ylab("waarschijnlijkheid reizen met vliegtuig") +
+  xlab("aanwezigheid van informatie") +
+  stat_summary(aes(y = rateAirplane, group=1),
+               fun.y=mean, colour="blue", size=1.5,
+               geom="line") +
+  stat_summary(aes(y = rateAirplane, group=1),
+               fun.y=mean, colour="red", size=7, shape = 15,
+               geom="point")
+
+# Uitvoeren one-way Anova
+
+
+#ManipTax en CO2CompMax
+#ManipInfo en Import
+  
+  # Base plot van ImportTime en rateAirplane
 # Outliers aanmaken. 
 outliers <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
                    c("ImportTime","rateAirplane")]
