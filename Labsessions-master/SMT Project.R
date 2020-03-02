@@ -6,13 +6,13 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
 setwd("/Users/amaniberkhof/Documents/Labsessions")
 
-setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
+#setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
-setwd("C:/Users/Barbara/Documents")
+#setwd("C:/Users/Barbara/Documents")
 
 
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
@@ -52,9 +52,25 @@ library(gmodels)
 # install.packages("Hmisc", dependencies = TRUE)
 library(Hmisc)
 
-#------------------------------------------------------------------------------------
-# Constructie Likert-Schalen
-#------------------------------------------------------------------------------------
+# Hier wordt het lmtest pakket eenmalig geinstalleerd.
+# Package lmtest for the durbinWatsonTest function
+# install.packages("lmtest", dependencies = TRUE)
+library(lmtest)
+
+# Hier wordt het lm.beta pakket eenmalig geinstalleerd.
+# Package lm.beta for standardized regression effects
+# coefficients with the lm.beta function
+# install.packages("lm.beta", dependencies = TRUE)
+library(lm.beta)
+
+# Hier wordt het car pakket eenmalig geinstalleerd.
+# Package car for type III anova and regression related
+# install.packages("car", dependencies = TRUE)
+library(car)
+
+#----------------------------------
+# CONSTRUCTIE LIKERT-SCHALEN
+#----------------------------------
 # Eerst wordt er een overkoepelende term aangemaakt die Nep01 tot Nep05
 # samenvat zodat er niet continu de hele rij herschreven hoeft te worden.
 # Vervolgens wordt de Cronbach's Alpha berekend voor Environmental Beliefs (EnvironBelief). 
@@ -83,7 +99,7 @@ psych::alpha(dsCase[Personal],
 # geeft str(rsltEnvironBelief) aan welke waarden er in rsltEnvironBelief zitten,
 # waaronder het gemiddelde.
 rsltEnvironBelief <-
-  alpha(dsCase[EnvironBelief],
+  psych::alpha(dsCase[EnvironBelief],
         keys = c("Nep01", "Nep05"),
         cumulative = FALSE)
 dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
@@ -94,7 +110,7 @@ str(rsltEnvironBelief)
 # geeft str(rsltGuiltFeel) aan welke waarden er in rsltGuiltFeel zitten, waaronder
 # het gemiddelde. 
 rsltGuiltFeel <-
-  alpha(dsCase[GuiltFeel],
+  psych::alpha(dsCase[GuiltFeel],
         keys = c("Guilt03", "Guilt04", "Guilt05"),
         cumulative = FALSE)
 dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
@@ -105,70 +121,32 @@ str(rsltGuiltFeel)
 # geeft str(rsltPersonal) aan welke waarden er in rsltPersonal zitten, waaronder
 # het gemiddelde.
 rsltPersonal <-
-  alpha(dsCase[Personal],
+  psych::alpha(dsCase[Personal],
         keys = c("Big01", "Big03", "Big07", "Big09"),
         cumulative = FALSE)
 dsCase$avgPersonal <- rsltPersonal$scores
 
 str(rsltPersonal)
 
+#----------------------------------
+# BESCHRIJVENDE ANALYSE 
+#----------------------------------
+# de Tabel wordt hier aangemaakt
+tbl <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
+                          "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
+                          "avgPersonal")], skew=FALSE)
+print(tbl, digits=3)
 
-#------------------------------------------------------------------------------------
-# Beschrijvende Analyse 
-#------------------------------------------------------------------------------------
-# Hier wordt de mean voor ManipDest / ManipInfo / ManipTax / Schiphol Train en
-# SchipholCar gegeven.  
-mean(dsCase$ManipDest)
-mean(dsCase$ManipInfo)
-mean(dsCase$ManipTax)
-mean(dsCase$SchipholTrain)
-mean(dsCase$SchipholCar)
+# Dit stuk code zorgt ervoor dat de net aangemaakte tabel wordt geexporteert. 
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+VarsBA <- c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
+            "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
+            "avgPersonal")
 
-# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
-# environmental beliefs.
-rsltEnvironBelief <-
-  alpha(dsCase[EnvironBelief],
-        keys = c("Nep01", "Nep05"),
-        cumulative = FALSE)
-dsCase$avgEnvironBelief <- rsltEnvironBelief$scores
-str(rsltEnvironBelief)
+library(stargazer)
+stargazer(dsCase[VarsBA], type="html", out="Tabel_BeschrijvendeAnalyse.doc")
 
-# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
-# Guilt Feelings dus Schuldgevoel. 
-rsltGuiltFeel <-
-  alpha(dsCase[Personal],
-        keys = c("Guilt03", "Guilt04", "Guilt05"),
-        cumulative = FALSE)
-dsCase$avgGuiltFeel <- rsltGuiltFeel$scores
-str(rsltGuiltFeel)
-
-# Hier wordt het gemiddelde (de Mean) berekend van alle items binnen 
-# Personality dus Persoonlijkheid met uitzondering van Big05 en Big10 omdat 
-# Die eerder geelimineerd zijn. 
-rsltPersonal <-
-  alpha(dsCase[Personal],
-        keys = c("Big01", "Big03", "Big07", "Big09"),
-        cumulative = FALSE)
-dsCase$avgPersonal <- rsltPersonal$scores
-str(rsltPersonal)
-
-# Hier wordt de standaard deviatie berekent voor ManipDest / ManipInfo / ManipTax / 
-# Schiphol Train en SchipholCar / Alle items van NEP / Alle items van GuiltFeel
-# en alle items van Personality.
-sd(dsCase$ManipDest)
-sd(dsCase$ManipInfo)
-sd(dsCase$ManipTax)
-sd(dsCase$SchipholTrain)
-sd(dsCase$SchipholCar)
-sd(dsCase$Nep01, dsCase$Nep02, dsCase$Nep03, dsCase$Nep04, dsCase$Nep05,
-       na.rm = TRUE)
-sd(dsCase$Guilt01, dsCase$Guilt02, dsCase$Guilt03, dsCase$Guilt04, 
-       dsCase$Guilt05, na.rm = TRUE)
-sd(dsCase$Big01, dsCase$Big02, dsCase$Big03, dsCase$Big04, dsCase$Big06,
-       dsCase$Big07, dsCase$Big08, dsCase$Big09, na.rm = TRUE)
-
-
-# Hier wordt de smediaan berekent voor ManipDest / ManipInfo / ManipTax / 
+# Hier wordt de mediaan berekent voor ManipDest / ManipInfo / ManipTax / 
 # Schiphol Train / SchipholCar / Alle items van NEP / Alle items van GuiltFeel
 # en alle items van Personality.
 median(dsCase$ManipDest)
@@ -183,31 +161,180 @@ median(dsCase$Guilt01, dsCase$Guilt02, dsCase$Guilt03, dsCase$Guilt04,
 median(dsCase$Big01, dsCase$Big02, dsCase$Big03, dsCase$Big04, dsCase$Big06,
        dsCase$Big07, dsCase$Big08, dsCase$Big09, na.rm = TRUE)
 
-# Hier kan je de N vinden van ManipDest / ManipInfo / ManipTax / 
-# Schiphol Train en SchipholCar.
-describe(dsCase$ManipDest)
-describe(dsCase$ManipInfo)
-describe(dsCase$ManipTax)
-describe(dsCase$SchipholTrain)
-describe(dsCase$SchipholCar)
+# Hier worden de waarden van de Modus berekent per kwantitatieve variabele.
+ModeManipDest <- table(dsCase$ManipDest)
+names(ModeManipDest)[ModeManipDest==max(ModeManipDest)]
+
+ModeManipInfo <- table(dsCase$ManipInfo)
+names(ModeManipInfo)[ModeManipInfo==max(ModeManipInfo)]
+
+ModeManipTax <- table(dsCase$ManipTax)
+names(ModeManipTax)[ModeManipTax==max(ModeManipTax)]
+
+ModeSchipholTrain <- table(dsCase$SchipholTrain)
+names(ModeSchipholTrain)[ModeSchipholTrain==max(ModeSchipholTrain)]
+
+ModeSchipholCar <- table(dsCase$SchipholCar)
+names(ModeSchipholCar)[ModeSchipholCar==max(ModeSchipholCar)]
+
+ModeavgEnvironBelief <- table(dsCase$avgEnvironBelief )
+names(ModeavgEnvironBelief )[ModeavgEnvironBelief==max(ModeavgEnvironBelief )]
+
+ModeavgGuiltFeel <- table(dsCase$avgGuiltFeel)
+names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
+
+ModeavgPersonal <- table(dsCase$avgPersonal)
+names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
+
+#----------------------------------
+# INTERVALSCHATTING
+#----------------------------------
+# Hier worden alle kwantitatieve variabelen gepakt
+tbl <- tbl[, c(2:4)]
+alpha <- 0.05
+tbl$t_crit <- qt(1 - alpha/2, tbl$n - 1)
+
+# De upper en lower bound worden aangemaakt.
+tbl$CI_low <- tbl$mean - tbl$t_crit*tbl$sd/sqrt(tbl$n)
+tbl$CI_upp <- tbl$mean + tbl$t_crit*tbl$sd/sqrt(tbl$n)
+
+
+#De tabel wordt geexporteerd als CSV file. 
+library(stargazer)
+tbl <- psych::describe(dsCase[VarsBA], skew = FALSE, ranges = FALSE)
+write.csv2(tbl, file = "Interval_BA.csv")
+
+#----------------------------------
+# UITBIJTERANALYSE
+#----------------------------------
+
+
+#----------------------------------
+# ANALYSE PAARSGEWIJZE SAMENHANG
+#----------------------------------
+
+#----------------------------------
+# KWANTITATIEF
+# ---------------------------------
+
+# Hier wordt wat gedaan met ImportComfort en RateAirplane  ????????????????????????????????????
+# -------------------------------------------------------------------------------------
+# Base plot van ImportComfort en rateAirplane
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportComfort < 40 & dsCase$rateAirplane < 40,
+                   c("ImportComfort","rateAirplane")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
+                ggplot2::geom_point(col="blue") +
+                ggplot2::labs(title = "titel") +
+                ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                                     size = 10, colour="red") +
+                ggplot2::ylim(0,105) +
+                ggplot2::xlim(0,105) +
+                ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+                ggplot2::geom_density_2d(col = "magenta")
+
+# ggplot opslaan.
+ggplot2::ggsave(paste0("baseplot_1.pdf"))     
+
+
+# Base plot van ImportTime en rateAirplane
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
+                   c("ImportTime","rateAirplane")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Base plot van ImportPrice en rateAirplane
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
+                   c("ImportPrice","rateAirplane")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+# Base plot van ImportPrice en CO2CompMax DIT LUKT NIET
+# Outliers aanmaken. 
+outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$CO2CompMax > 30,
+                   c("ImportPrice","CO2CompMax")]
+outliers
+
+# ggplot aanmaken met lijn, outliers en density weergave.
+ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
+  ggplot2::geom_point(col="blue") +
+  ggplot2::labs(title = "titel") +
+  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
+                      size = 10, colour="red") +
+  ggplot2::ylim(0,105) +
+  ggplot2::xlim(0,105) +
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
+  ggplot2::geom_density_2d(col = "magenta")
+
+
+#-----------------------------------
+# DOORKRUISENDHEDEN EN INTERACTIES
+#-----------------------------------
+# Lu en Iris nog aan werken. 
+
+
+#-----------------------
+# MEERVOUDIGE SAMENHANG
+#-----------------------
+# Factoren aanmaken
+FacManipInfo <- factor(dsCase$ManipInfo,labels=c("Yes", "No"))
+levels(FacManipInfo)
+
+FacManipTax <- factor(dsCase$ManipTax,labels=c("only price flight ticket", 
+                                                   "price flight ticket including low tax", 
+                                                   "price including high tax"))
+levels(FacManipTax)
+
+FacSchipholCar <- factor(dsCase$SchipholCar,labels=c("<30", "30-45", 
+                                                           "45-60",">60", "no car"))
+levels(FacSchipholCar)
+
+FacSchipholTrain<-factor(dsCase$SchipholTrain, labels=c("<30", "30-45", "45-60",">60"))
+levels(FacSchipholTrain)
+
+FacManipDest <- factor(dsCase$ManipDest, labels=c("Berlin", "London", "Marseille"))
+levels(FacManipDest)
+
 #------------------------------------------------------------------------------------
-# Analyse Paarsgewijze Samenhangen
-#------------------------------------------------------------------------------------
+# Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
+# Regressie rateAirplane 
+ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
+  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
+  lm(ModelA, data=dsCase)
+  rsltA<- lm(ModelA, data=dsCase)
 
+# Regressie CO2CompMax
+ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
+  Big01 + Big05 + ImportPrice + ManipTax
+  lm(ModelB, data=dsCase)
+  rsltC<- lm(ModelB, data=dsCase)
 
-
-#------------------------------------------------------------------------------------
-# Doorkruisendheden en Interactie
-#------------------------------------------------------------------------------------
-
-
-
-#------------------------------------------------------------------------------------
-# Meervoudige Samenhang
-#------------------------------------------------------------------------------------
-
-
-
-
-
+#----------------------------------
+# REGRESSIE ANALYSE
+#----------------------------------
 
