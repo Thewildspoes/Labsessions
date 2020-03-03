@@ -273,11 +273,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
 ggplot2::ggsave(paste0("Plot_ICRA.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubICRA <- subset(dsCase,
                 select=c("ImportComfort", "rateAirplane"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubICRA), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubICRA), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # RATEAIRPLANE EN IMPORTPRICE
@@ -302,11 +302,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
 ggplot2::ggsave(paste0("Plot_IPRA.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubIPRA <- subset(dsCase,
                 select=c("ImportPrice", "rateAirplane"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubIPRA), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubIPRA), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # RATEAIRPLANE & IMPORTTIME
@@ -331,11 +331,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
 ggplot2::ggsave(paste0("Plot_ITRA.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubITRA <- subset(dsCase,
                 select=c("rateAirplane", "ImportPrice"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubITRA), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubITRA), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # RATEAIRPLANE EN NEP (ENVIRONBELIEF)
@@ -360,11 +360,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=rateAirplane)) +
 ggplot2::ggsave(paste0("Plot_EBRA.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubEBRA <- subset(dsCase,
                 select=c("avgEnvironBelief", "rateAirplane"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubEBRA), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubEBRA), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # GUILT (GUILTFEEL) EN NEP (ENVIRONBELIEF)
@@ -391,11 +391,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=avgEnvironBelief)) +
 ggplot2::ggsave(paste0("Plot_GFEB.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubGFEB <- subset(dsCase,
                 select=c("avgGuiltFeel", "avgEnvironBelief"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubGFEB), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubGFEB), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # NEP (ENVIRONBELIEF) EN CO2COMPMAX
@@ -420,11 +420,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=CO2CompMax)) +
 ggplot2::ggsave(paste0("Plot_EBCO2.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubEBCO2 <- subset(dsCase,
                 select=c("avgEnvironBelief", "CO2CompMax"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubEBCO2), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubEBCO2), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # GUILT (GUILTFEEL) EN CO2COMPMAX
@@ -449,11 +449,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=CO2CompMax)) +
 ggplot2::ggsave(paste0("Plot_GFCO2.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubGFCO2 <- subset(dsCase,
                 select=c("avgGuiltFeel", "CO2CompMax"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubGFCO2), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubGFCO2), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # BIG (PERSONAL) EN CO2COMPMAX
@@ -478,11 +478,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=CO2CompMax)) +
 ggplot2::ggsave(paste0("Plot_PSCO2.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubPSCO2 <- subset(dsCase,
                 select=c("avgPersonal", "CO2CompMax"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubPSCO2), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubPSCO2), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # BIG (PERSONAL) EN GUILT (GUITLFEEL)
@@ -507,11 +507,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=avgGuiltFeel)) +
 ggplot2::ggsave(paste0("Plot_PSGF.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubPSGF <- subset(dsCase,
                 select=c("avgPersonal", "avgGuiltFeel"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubPSGF), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubPSGF), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # CO2COMPMAX EN IMPORTPRICE 
@@ -536,11 +536,11 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
 ggplot2::ggsave(paste0("Plot_IPCO2.pdf")) 
 
 # Uitvoeren correlatie
-dsSub <- subset(dsCase,
+dsSubIPCO2 <- subset(dsCase,
                 select=c("ImportPrice", "CO2CompMax"))
 
-Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubIPCO2), type=c("spearman"))
+Hmisc::rcorr(as.matrix(dsSubIPCO2), type="pearson")
 
 #-----------------------------------------------------------------------------------------------
 # T-TOETS BEREKENEN
@@ -812,14 +812,15 @@ cbind(ChisqStat = rsltChisqSCST$statistic,
 # Nep opschonen voor de relatie tussen Guilt en CO2CompMax
 
 # Uitvoeren partiële correlatie
-dsSub <- subset(dsCase,
+dsSubDKH <- subset(dsCase,
                 select=c("avgGuiltFeel", "CO2CompMax", "avgPersonal"))
 
 ppcor::pcor.test(dsCase$avgGuiltFeel, dsCase$CO2CompMax, dsCase$avgPersonal)
 
-Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+Hmisc::rcorr(as.matrix(dsSubDKH), type="pearson")
 
-Hmisc::rcorr(as.matrix(dsSub))
+Hmisc::rcorr(as.matrix(dsSubDKH))
+
 #-----------------------------------------------------------------------------------------------
 # MEERVOUDIGE SAMENHANG
 #-----------------------------------------------------------------------------------------------
