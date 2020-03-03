@@ -1,4 +1,9 @@
 #------------------------------------------------------------------------------------
+#                                     SMT CASE 2020 
+# Amani Berkhof - Lu Li Heerkens - Barbara van Leeuwen - Iris de Ruyter de Wildt
+#------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------
 # Instellen werkruimte en inlezen van gegevens en pakketten
 #------------------------------------------------------------------------------------
 # Hier zetten we de working directory vast. Dit moet verandert worden als 
@@ -230,7 +235,128 @@ write.csv2(tblInterSchat, file = "IntervalSchatting_tbl.csv")
 #----------------------------------
 # UITBIJTERANALYSE
 #----------------------------------
+# z scores berekenen
+zCO2CompMax <- scale(dsCase$CO2CompMax)
+which(zCO2CompMax>3)
+which(abs(zCO2CompMax)>3)
 
+zrateAirplane <- scale(dsCase$rateAirplane)
+which(zrateAirplane>3)
+which(abs(zrateAirplane)>3)
+
+zImportComfort <- scale(dsCase$ImportComfort)
+which(zImportComfort>3)
+which(abs(zImportComfort)>3)
+
+zImportPrice <- scale(dsCase$ImportPrice)
+which(zImportPrice>3)
+which(abs(zImportPrice)>3)
+
+zImportTime <- scale(dsCase$ImportTime)
+which(zImportTime>3)
+which(abs(zImportTime)>3)
+
+zavgEnvironBelief <- scale(dsCase$avgEnvironBelief)
+which(zavgEnvironBelief>3)
+which(abs(zavgEnvironBelief)>3)
+
+zavgGuiltFeel <- scale(dsCase$avgGuiltFeel)
+which(zavgGuiltFeel>3)
+which(abs(zavgGuiltFeel)>3)
+
+zavgPersonal <- scale(dsCase$avgPersonal)
+which(zavgPersonal>3)
+which(abs(zavgPersonal)>3)
+
+# Weglaten uitbijters
+#----------------------------------
+# CO2CompMax
+CO2CompMaxBefore <- mean(dsCase$CO2CompMax, na.rm=TRUE)
+
+CO2CompMaxAfter <- mean(dsCase$CO2CompMax[-which(abs(zCO2CompMax)>3)],
+                         na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (CO2CompMaxAfter - CO2CompMaxBefore))
+cat("Relative difference after and before (in pct)",
+    100*(CO2CompMaxAfter - CO2CompMaxBefore)/CO2CompMaxBefore)
+
+# rateAirplane
+rateAirplaneBefore <- mean(dsCase$rateAirplane, na.rm=TRUE)
+
+rateAirplaneAfter <- mean(dsCase$rateAirplane[-which(abs(zrateAirplane)>3)],
+                        na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (rateAirplaneAfter - rateAirplaneBefore))
+cat("Relative difference after and before (in pct)",
+    100*(rateAirplaneAfter - rateAirplaneBefore)/rateAirplaneBefore)
+
+# ImportComfort
+ImportComfortBefore <- mean(dsCase$ImportComfort, na.rm=TRUE)
+
+ImportComfortAfter <- mean(dsCase$ImportComfort[-which(abs(zImportComfort)>3)],
+                          na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (ImportComfortAfter - ImportComfortBefore))
+cat("Relative difference after and before (in pct)",
+    100*(ImportComfortAfter - ImportComfortBefore)/ImportComfortBefore)
+
+# ImportPrice
+ImportPriceBefore <- mean(dsCase$ImportPrice, na.rm=TRUE)
+
+ImportPriceAfter <- mean(dsCase$ImportPrice[-which(abs(zImportPrice)>3)],
+                           na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (ImportPriceAfter - ImportPriceBefore))
+cat("Relative difference after and before (in pct)",
+    100*(ImportPriceAfter - ImportPriceBefore)/ImportPriceBefore)
+
+# ImportTime
+ImportTimeBefore <- mean(dsCase$ImportTime, na.rm=TRUE)
+
+ImportTimeAfter <- mean(dsCase$ImportTime[-which(abs(zImportTime)>3)],
+                         na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (ImportTimeAfter - ImportTimeBefore))
+cat("Relative difference after and before (in pct)",
+    100*(ImportTimeAfter - ImportTimeBefore)/ImportTimeBefore)
+
+# avgEnvironBelief
+avgEnvironBeliefBefore <- mean(dsCase$avgEnvironBelief, na.rm=TRUE)
+
+avgEnvironBeliefAfter <- mean(dsCase$avgEnvironBelief[-which(abs(zavgEnvironBelief)>3)],
+                        na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (avgEnvironBeliefAfter - avgEnvironBeliefBefore))
+cat("Relative difference after and before (in pct)",
+    100*(avgEnvironBeliefAfter - avgEnvironBeliefBefore)/avgEnvironBeliefBefore)
+
+# avgGuiltFeel
+avgGuiltFeelBefore <- mean(dsCase$avgGuiltFeel, na.rm=TRUE)
+
+avgGuiltFeelAfter <- mean(dsCase$avgGuiltFeel[-which(abs(zavgGuiltFeel)>3)],
+                              na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (avgGuiltFeelAfter - avgGuiltFeelBefore))
+cat("Relative difference after and before (in pct)",
+    100*(avgGuiltFeelAfter - avgGuiltFeelBefore)/avgGuiltFeelBefore)
+
+# avgPersonal
+avgPersonalBefore <- mean(dsCase$avgPersonal, na.rm=TRUE)
+
+avgPersonalAfter <- mean(dsCase$avgPersonal[-which(abs(zavgPersonal)>3)],
+                          na.rm=TRUE)
+
+cat("Absolute difference after and before",
+    (avgPersonalAfter - avgPersonalBefore))
+cat("Relative difference after and before (in pct)",
+    100*(avgPersonalAfter - avgPersonalBefore)/avgPersonalBefore)
 
 #----------------------------------
 # ANALYSE PAARSGEWIJZE SAMENHANG
