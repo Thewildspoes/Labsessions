@@ -261,7 +261,7 @@ outliersICRA
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "ICRA") +
+  ggplot2::labs(title = "ImportComfort / rateAirplane") +
   ggplot2::geom_point(data=outliersICRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
@@ -290,7 +290,7 @@ outliersIPRA
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "IPRA") +
+  ggplot2::labs(title = "ImportPrice / rateAirplane") +
   ggplot2::geom_point(data=outliersIPRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
@@ -319,7 +319,7 @@ outliersITRA
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "ITRA") +
+  ggplot2::labs(title = "ImportTime / rateAirplane") +
   ggplot2::geom_point(data=outliersITRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
@@ -348,7 +348,7 @@ outliersEBRA
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "EBRA") +
+  ggplot2::labs(title = "Gemiddelde EnvironBelief / rateAirplane") +
   ggplot2::geom_point(data=outliersEBRA, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
@@ -379,7 +379,7 @@ outliersGFEB
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=avgEnvironBelief)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "GFEB") +
+  ggplot2::labs(title = "Gemiddelde GuiltFeel / Gemiddelde EnvironBelief") +
   ggplot2::geom_point(data=outliersGFEB, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,6.5) +
@@ -408,7 +408,7 @@ outliersEBCO2
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=CO2CompMax)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "EBCO2") +
+  ggplot2::labs(title = "Gemiddelde EnvironBelief / CO2CompMax") +
   ggplot2::geom_point(data=outliersEBCO2, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
@@ -437,7 +437,7 @@ outliersGFCO2
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=CO2CompMax)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "GFCO2") +
+  ggplot2::labs(title = "Gemiddelde GuiltFeel / CO2CompMax") +
   ggplot2::geom_point(data=outliersGFCO2, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
@@ -466,7 +466,7 @@ outliersPSCO2
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=CO2CompMax)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "PSCO2") +
+  ggplot2::labs(title = "Gemiddelde Personal / CO2CompMax") +
   ggplot2::geom_point(data=outliersPSCO2, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
@@ -495,7 +495,7 @@ outliersPSGF
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=avgGuiltFeel)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "PSGF") +
+  ggplot2::labs(title = "Gemiddelde Personal / Gemiddelde GuiltFeel") +
   ggplot2::geom_point(data=outliersPSGF, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0.5,5) +
@@ -524,7 +524,7 @@ outliersIPCO2
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
   ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "IPCO2") +
+  ggplot2::labs(title = "ImportPrice / CO2CompMax") +
   ggplot2::geom_point(data=outliersIPCO2, shape = 1, stroke = 1.5,
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
