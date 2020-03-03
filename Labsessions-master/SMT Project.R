@@ -587,7 +587,7 @@ t.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 
 # ONEWAY ANOVA
 # ------------------------------------------------------------
-# ManipTax en rateAirplane
+# ManipTax en CO2CompMax
 # ------------------------------------------------------------
 # ManipTax: one-way tabel met frequenties
 tabelMT <- table(dsCase$ManipTax)
@@ -597,6 +597,16 @@ cbind(Freq = tabelMT,
       CumFreq = cumsum(tabelMT),
       Perc = 100*tabelMT/sum(tabelMT),
       CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
+
+ggplot2::ggplot(dsCase, ggplot2::aes(x = CO2CompMax)) +
+        ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+        ggplot2::xlab("Intentie om het contract te accepteren") +
+        ggplot2::facet_grid(~ FacManipTax)
+
+ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipTax, y=CO2CompMax, fill = FacManipTax)) +
+                ggplot2::geom_boxplot(col = "black") +
+                ggplot2::ylab("Intentie om het contract te accepteren") +
+                ggplot2::xlab("Woonsituatie")
 
 
 # Histogram
