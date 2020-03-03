@@ -605,6 +605,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x = CO2CompMax)) +
         ggplot2::xlab("X-as Naam") +
         ggplot2::facet_grid(~ ManipTax) +
         ggplot2::xlim(0,40)
+ggplot2::ggsave(paste0("Histo_CO2MT.pdf")) 
 
 # Boxplot van FacManipTax en CO2CompMax
 ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipTax, y=CO2CompMax, fill = FacManipTax)) +
@@ -612,39 +613,42 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipTax, y=CO2CompMax, fill = FacMa
                 ggplot2::ylab("Y-as Naam") +
                 ggplot2::xlab("X-as Naam") +
                 ggplot2::ylim(0,40)
+ggplot2::ggsave(paste0("Boxplot_CO2MT.pdf")) 
 
+# Groepstatistieken van deelpopulaties CO2CompMax en ManipTax (4.3.3)
+psych:: describeBy(dsCase$ManipTax, dsCase$CO2CompMax)
 
 # Histogram
-ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
-  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
-  ggplot2::xlab("Intentie om het contract te accepteren") +
-  ggplot2::facet_grid(~ ManipInfo)
+#ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
+  #ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  #ggplot2::xlab("Intentie om het contract te accepteren") +
+  #ggplot2::facet_grid(~ ManipInfo)
 
-ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane)) +
-  geom_point(col = "black") +
-  ylab("waarschijnlijkheid reizen met vliegtuig") +
-  xlab("aanwezigheid van informatie")
+#ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane)) +
+  #geom_point(col = "black") +
+  #ylab("waarschijnlijkheid reizen met vliegtuig") +
+  #xlab("aanwezigheid van informatie")
 
 # Boxplot
-ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane,
-                   fill = ManipInfo)) +
-  geom_boxplot(col = "black") +
-  ylab("waarschijnlijkheid reizen met vliegtuig") +
-  xlab("aanwezigheid van informatie")
+#ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane,
+                #   fill = ManipInfo)) +
+ # geom_boxplot(col = "black") +
+ # ylab("waarschijnlijkheid reizen met vliegtuig") +
+  #xlab("aanwezigheid van informatie")
 
-ggsave(paste0(dirRslt, "gg_anovaHistogram.pdf"))
+#ggsave(paste0(dirRslt, "gg_anovaHistogram.pdf"))
 
 # ggplot
-ggplot(dsCase, aes(x =ManipInfo, y=rateAirplane)) +
-  geom_point(col = "black") +
-  ylab("waarschijnlijkheid reizen met vliegtuig") +
-  xlab("aanwezigheid van informatie") +
-  stat_summary(aes(y = rateAirplane, group=1),
-               fun.y=mean, colour="blue", size=1.5,
-               geom="line") +
-  stat_summary(aes(y = rateAirplane, group=1),
-               fun.y=mean, colour="red", size=7, shape = 15,
-               geom="point")
+#ggplot(dsCase, aes(x =ManipInfo, y=rateAirplane)) +
+  #geom_point(col = "black") +
+  #ylab("waarschijnlijkheid reizen met vliegtuig") +
+ # xlab("aanwezigheid van informatie") +
+ # stat_summary(aes(y = rateAirplane, group=1),
+              # fun.y=mean, colour="blue", size=1.5,
+              # geom="line") +
+  #stat_summary(aes(y = rateAirplane, group=1),
+               #fun.y=mean, colour="red", size=7, shape = 15,
+               #geom="point")
 
 #ManipTax en CO2CompMax
 # ------------------------------------------------------------
