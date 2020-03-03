@@ -72,6 +72,10 @@ library(car)
 #install.packages("plyr", dependencies = TRUE)
 library(plyr)
 
+# Hier wordt het ppcor pakket eenmalig geinstalleerd.
+# install.packages("ppcor", dependencies = TRUE)
+library(ppcor)
+
 #----------------------------------
 # CONSTRUCTIE LIKERT-SCHALEN
 #----------------------------------
@@ -803,9 +807,19 @@ cbind(ChisqStat = rsltChisqSCST$statistic,
 #-----------------------------------------------------------------------------------------------
 # DOORKRUISENDHEDEN EN INTERACTIES
 #-----------------------------------------------------------------------------------------------
-# Lu en Iris nog aan werken. 
+# Partiële correlatie
+#-----------------------------------------------------------------------------------------------
+# Nep opschonen voor de relatie tussen Guilt en CO2CompMax
 
+# Uitvoeren partiële correlatie
+dsSub <- subset(dsCase,
+                select=c("avgGuiltFeel", "CO2CompMax", "avgPersonal"))
 
+ppcor::pcor.test(dsCase$avgGuiltFeel, dsCase$CO2CompMax, dsCase$avgPersonal)
+
+Hmisc::rcorr(as.matrix(dsSub), type="pearson")
+
+Hmisc::rcorr(as.matrix(dsSub))
 #-----------------------------------------------------------------------------------------------
 # MEERVOUDIGE SAMENHANG
 #-----------------------------------------------------------------------------------------------
