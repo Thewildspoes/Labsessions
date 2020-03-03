@@ -6,9 +6,9 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+# setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-# setwd("/Users/amaniberkhof/Documents/Labsessions")
+setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
