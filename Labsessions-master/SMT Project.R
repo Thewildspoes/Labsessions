@@ -50,7 +50,7 @@ library(gmodels)
 # Hier wordt het Hmisc pakket eenmalig geinstalleerd.
 # Wordt gebruikt voor correlatie test informatie.
 # "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
-#install.packages("Hmisc", dependencies = TRUE)
+# install.packages("Hmisc", dependencies = TRUE)
 library(Hmisc)
 
 # Hier wordt het lmtest pakket eenmalig geinstalleerd.
