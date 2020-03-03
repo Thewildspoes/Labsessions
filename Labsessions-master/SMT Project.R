@@ -552,21 +552,38 @@ Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 # T-TOETS BEREKENEN
 # ------------------------------------------------------------
 # Hier wordt een tabel van kengetallen van rateAirplane aangemaakt en een steekproef van
-# rateAirplane gedefinieerd door de uitkomsten van de group variabele ManipDest.
+# rateAirplane gedefinieerd door de uitkomsten van de group variabele ManipInfo.
 psych::describe(dsCase$rateAirplane, skew = FALSE, ranges = FALSE)
-psych::describeBy(dsCase$rateAirplane, group=dsCase$ManipDest, skew=FALSE, range=FALSE)
+psych::describeBy(dsCase$rateAirplane, group=dsCase$ManipInfo, skew=FALSE, range=FALSE)
 
 # Kengetallen uit steekproef worden in template gezet.
-templateRateAir <- psych::describeBy(dsCase$rateAirplane, group=dsCase$ManipDest,
+templateRateAir <- psych::describeBy(dsCase$rateAirplane, group=dsCase$ManipInfo,
                   skew=FALSE, range = FALSE)
 
 # template wordt verbonden tot duidelijke tabel.
 utils::str(templateRateAir)
 rbind(
-  data.frame(ManipDest=1, templateRateAir$"1"),
-  data.frame(ManipDest=2, templateRateAir$"2"),
-  data.frame(ManipDest=3, templateRateAir$"3"))
+  data.frame(ManipInfo=1, templateRateAir$"1"),
+  data.frame(ManipInfo=2, templateRateAir$"2"))
 
+t.test(dsCase$rateAirplane ~ dsCase$ManipInfo)
+
+# Hier wordt een tabel van kengetallen van ImportTime aangemaakt en een steekproef van
+# ImportTime gedefinieerd door de uitkomsten van de group variabele ManipInfo.
+psych::describe(dsCase$ImportTime, skew = FALSE, ranges = FALSE)
+psych::describeBy(dsCase$ImportTime, group=dsCase$ManipInfo, skew=FALSE, range=FALSE)
+
+# Kengetallen uit steekproef worden in template gezet.
+templateImportTime <- psych::describeBy(dsCase$ImportTime, group=dsCase$ManipInfo,
+                                     skew=FALSE, range = FALSE)
+
+# template wordt verbonden tot duidelijke tabel.
+utils::str(templateImportTime)
+rbind(
+  data.frame(ManipInfo=1, templateImportTime$"1"),
+  data.frame(ManipInfo=2, templateImportTime$"2"))
+
+t.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 
 # ONEWAY ANOVA
 # ------------------------------------------------------------
