@@ -598,22 +598,27 @@ cbind(Freq = tabelMT,
       Perc = 100*tabelMT/sum(tabelMT),
       CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
 
+# Histogram van CO2CompMax met x-as van ManipTax met een xlim van 40 om betere verdeling weer
+# te geven zonder extreme outliers. 
 ggplot2::ggplot(dsCase, ggplot2::aes(x = CO2CompMax)) +
         ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
-        ggplot2::xlab("Intentie om het contract te accepteren") +
-        ggplot2::facet_grid(~ FacManipTax)
+        ggplot2::xlab("X-as Naam") +
+        ggplot2::facet_grid(~ ManipTax) +
+        ggplot2::xlim(0,40)
 
+# Boxplot van FacManipTax en CO2CompMax
 ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipTax, y=CO2CompMax, fill = FacManipTax)) +
                 ggplot2::geom_boxplot(col = "black") +
-                ggplot2::ylab("Intentie om het contract te accepteren") +
-                ggplot2::xlab("Woonsituatie")
+                ggplot2::ylab("Y-as Naam") +
+                ggplot2::xlab("X-as Naam") +
+                ggplot2::ylim(0,40)
 
 
 # Histogram
-ggplot(dsCase, aes(x = rateAirplane)) +
-  geom_histogram(bins=15, fill = "darkgreen", col = "black") +
-  xlab("Intentie om het contract te accepteren") +
-  facet_grid(~ ManipInfo)
+ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("Intentie om het contract te accepteren") +
+  ggplot2::facet_grid(~ ManipInfo)
 
 ggplot(dsCase, aes(x = ManipInfo, y=rateAirplane)) +
   geom_point(col = "black") +
