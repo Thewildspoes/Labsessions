@@ -590,6 +590,15 @@ t.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 # ------------------------------------------------------------
 # ManipInfo en rateAirplane
 # ------------------------------------------------------------
+tabelRA <- table(dsCase$rateAirplane)
+tabelRA
+
+cbind(Freq = tabelRA,
+      CumFreq = cumsum(tabelRA),
+      Perc = 100*tabelRA/sum(tabelRA),
+      CumPerc = cumsum(100*tabelRA/sum(tabelRA)))
+
+
 # Histogram
 ggplot(dsCase, aes(x = rateAirplane)) +
   geom_histogram(bins=15, fill = "darkgreen", col = "black") +
