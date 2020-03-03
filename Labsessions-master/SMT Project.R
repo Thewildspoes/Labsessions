@@ -588,15 +588,16 @@ t.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 
 # ONEWAY ANOVA
 # ------------------------------------------------------------
-# ManipInfo en rateAirplane
+# ManipTax en rateAirplane
 # ------------------------------------------------------------
-tabelRA <- table(dsCase$rateAirplane)
-tabelRA
+# ManipTax: one-way tabel met frequenties
+tabelMT <- table(dsCase$ManipTax)
+tabelMT
 
-cbind(Freq = tabelRA,
-      CumFreq = cumsum(tabelRA),
-      Perc = 100*tabelRA/sum(tabelRA),
-      CumPerc = cumsum(100*tabelRA/sum(tabelRA)))
+cbind(Freq = tabelMT,
+      CumFreq = cumsum(tabelMT),
+      Perc = 100*tabelMT/sum(tabelMT),
+      CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
 
 
 # Histogram
