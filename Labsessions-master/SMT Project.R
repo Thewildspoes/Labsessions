@@ -6,9 +6,9 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-setwd("/Users/amaniberkhof/Documents/Labsessions")
+# setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
@@ -231,7 +231,6 @@ write.csv2(tblInterSchat, file = "IntervalSchatting_tbl.csv")
 #----------------------------------
 # ANALYSE PAARSGEWIJZE SAMENHANG
 #----------------------------------
-
 #----------------------------------
 # KWANTITATIEF
 # ---------------------------------
@@ -572,8 +571,7 @@ wilcox.test(dsCase$rateAirplane ~ dsCase$ManipInfo)
 #-----------------------------------------------------------------------------------------------
 # IMPORTTIME EN MANIPINFO
 #-----------------------------------------------------------------------------------------------
-
--# Hier wordt een tabel van kengetallen van ImportTime aangemaakt en een steekproef van
+# Hier wordt een tabel van kengetallen van ImportTime aangemaakt en een steekproef van
 # ImportTime gedefinieerd door de uitkomsten van de group variabele ManipInfo.
 psych::describe(dsCase$ImportTime, skew = FALSE, ranges = FALSE)
 psych::describeBy(dsCase$ImportTime, group=dsCase$ManipInfo, skew=FALSE, range=FALSE)
@@ -619,7 +617,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x = CO2CompMax)) +
         ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
         ggplot2::xlab("CO2CompMax") +
         ggplot2::facet_grid(~ ManipTax) +
-        ggplot2::xlim(0,40)
+        ggplot2::xlim(0,50)
 ggplot2::ggsave(paste0("Histo_CO2MT.pdf")) 
 
 # Boxplot van FacManipTax en CO2CompMax
@@ -627,164 +625,159 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipTax, y=CO2CompMax, fill = FacMa
                 ggplot2::geom_boxplot(col = "black") +
                 ggplot2::ylab("CO2CompMax") +
                 ggplot2::xlab("FacManipTax") +
-                ggplot2::ylim(0,40)
+                ggplot2::ylim(0,50)
 ggplot2::ggsave(paste0("Boxplot_CO2MT.pdf")) 
 
-# Groepstatistieken van deelpopulaties CO2CompMax en ManipTax (4.3.3)
+# Groepstatistieken van deelpopulaties CO2CompMax en ManipTax
 psych:: describeBy(dsCase$ManipTax, dsCase$CO2CompMax)
 
 # Uitvoeren Anova toets
-resultAov <- aov(dsCase$CO2CompMax ~ dsCase$ManipTax)
+resultANOCO2MT <- aov(dsCase$CO2CompMax ~ dsCase$ManipTax)
 
-summary(resultAov)
+summary(resultANOCO2MT)
 
 #-------------------------------------------------------------------------------------------------
 # MANIPTAX EN IMPORTPRICE
 #-----------------------------------------------------------------------------------------------
-# ManipTax: one-way tabel met frequenties
-tabelMT <- table(dsCase$ManipTax)
-tabelMT
-
-cbind(Freq = tabelMT,
-      CumFreq = cumsum(tabelMT),
-      Perc = 100*tabelMT/sum(tabelMT),
-      CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
-
-# Histogram van ManipTax met x-as van ImportPrice met een xlim van 40 om betere verdeling weer
+# Histogram van ManipTax met x-as van ImportPrice met een xlim van 100 om betere verdeling weer
 # te geven zonder extreme outliers. 
+
 ggplot2::ggplot(dsCase, ggplot2::aes(x = ImportPrice)) +
   ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
   ggplot2::xlab("ImportPrice") +
   ggplot2::facet_grid(~ ManipTax) +
-  ggplot2::xlim(0,40)
-ggplot2::ggsave(paste0("Histo_CO2MT.pdf")) 
+  ggplot2::xlim(0,100)
+ggplot2::ggsave(paste0("Histo_IPMT.pdf")) 
 
 # Boxplot van FacManipTax en ImportPrice
 ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipTax, y=ImportPrice, fill = FacManipTax)) +
   ggplot2::geom_boxplot(col = "black") +
   ggplot2::ylab("ManipTax") +
   ggplot2::xlab("ImportPrice") +
-  ggplot2::ylim(0,40)
-ggplot2::ggsave(paste0("Boxplot_CO2MT.pdf")) 
+  ggplot2::ylim(0,100)
+ggplot2::ggsave(paste0("Boxplot_IPMT.pdf")) 
 
-# Groepstatistieken van deelpopulaties ImportPrice en ManipTax (4.3.3)
+# Groepstatistieken van deelpopulaties ImportPrice en ManipTax
 psych:: describeBy(dsCase$ManipTax, dsCase$ImportPrice)
 
 # Uitvoeren Anova toets
-resultAov <- aov(dsCase$ImportPrice ~ dsCase$ManipTax)
+resultANOIPMT <- aov(dsCase$ImportPrice ~ dsCase$ManipTax)
 
-summary(resultAov)
+summary(resultANOIPMT)
 
 #-------------------------------------------------------------------------------------------------
 # MANIPDEST EN RATEAIRPLANE
 #-----------------------------------------------------------------------------------------------
 # ManipDest: one-way tabel met frequenties
-tabelMT <- table(dsCase$ManipDest)
-tabelMT
+tabelMD <- table(dsCase$ManipDest)
+tabelMD
 
-cbind(Freq = tabelMT,
-      CumFreq = cumsum(tabelMT),
-      Perc = 100*tabelMT/sum(tabelMT),
-      CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
+cbind(Freq = tabelMD,
+      CumFreq = cumsum(tabelMD),
+      Perc = 100*tabelMD/sum(tabelMD),
+      CumPerc = cumsum(100*tabelMD/sum(tabelMD)))
 
-# Histogram van ManipDest met x-as van rateAirplane met een xlim van 40 om betere verdeling weer
-# te geven zonder extreme outliers. 
+# Histogram van ManipDest met x-as van rateAirplane met een xlim van 100 en een ylim van 55
+# om betere verdeling weer te geven zonder extreme outliers. 
 ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
   ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
   ggplot2::xlab("rateAirplane") +
   ggplot2::facet_grid(~ ManipDest) +
-  ggplot2::xlim(0,40)
-ggplot2::ggsave(paste0("Histo_CO2MT.pdf")) 
+  ggplot2::xlim(0,100) +
+  ggplot2::ylim(0,55)
+ggplot2::ggsave(paste0("Histo_RAMD.pdf")) 
 
 # Boxplot van FacManipDest en rateAirplane
 ggplot2::ggplot(dsCase, ggplot2::aes(x = FacManipDest, y=rateAirplane, fill = FacManipDest)) +
   ggplot2::geom_boxplot(col = "black") +
   ggplot2::ylab("ManipDest") +
   ggplot2::xlab("rateAirplane") +
-  ggplot2::ylim(0,40)
-ggplot2::ggsave(paste0("Boxplot_CO2MT.pdf")) 
+  ggplot2::ylim(0,100)
+ggplot2::ggsave(paste0("Boxplot_RAMD.pdf")) 
 
-# Groepstatistieken van deelpopulaties rateAirplane en ManipDest (4.3.3)
+# Groepstatistieken van deelpopulaties rateAirplane en ManipDest
 psych:: describeBy(dsCase$ManipDest, dsCase$rateAirplane)
 
 # Uitvoeren Anova toets
-resultAov <- aov(dsCase$rateAirplane ~ dsCase$ManipDest)
+resultANORAMD <- aov(dsCase$rateAirplane ~ dsCase$ManipDest)
 
-summary(resultAov)
+summary(resultANORAMD)
 
 #-------------------------------------------------------------------------------------------------
 # SCHIPHOLTRAIN EN RATEAIRPLANE
 #-----------------------------------------------------------------------------------------------
 # SchipholTrain: one-way tabel met frequenties
-tabelMT <- table(dsCase$SchipholTrain)
-tabelMT
+tabelST <- table(dsCase$SchipholTrain)
+tabelST
 
-cbind(Freq = tabelMT,
-      CumFreq = cumsum(tabelMT),
-      Perc = 100*tabelMT/sum(tabelMT),
-      CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
+cbind(Freq = tabelST,
+      CumFreq = cumsum(tabelST),
+      Perc = 100*tabelST/sum(tabelST),
+      CumPerc = cumsum(100*tabelST/sum(tabelST)))
 
-# Histogram van SchipholTrain met x-as van rateAirplane met een xlim van 40 om betere verdeling weer
-# te geven zonder extreme outliers. 
+# Histogram van SchipholTrain met x-as van rateAirplane met een xlim van 100 en een ylim van 45
+# om betere verdeling weer te geven zonder extreme outliers. 
 ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
   ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
   ggplot2::xlab("rateAirplane") +
   ggplot2::facet_grid(~ SchipholTrain) +
-  ggplot2::xlim(0,40)
-ggplot2::ggsave(paste0("Histo_CO2MT.pdf")) 
+  ggplot2::xlim(0,100) +
+  ggplot2::ylim(0,45)
+ggplot2::ggsave(paste0("Histo_RAST.pdf")) 
 
 # Boxplot van FacSchipholTrain en rateAirplane
 ggplot2::ggplot(dsCase, ggplot2::aes(x = FacSchipholTrain, y=rateAirplane, fill = FacSchipholTrain)) +
   ggplot2::geom_boxplot(col = "black") +
   ggplot2::ylab("SchipholTrain") +
   ggplot2::xlab("rateAirplane") +
-  ggplot2::ylim(0,40)
-ggplot2::ggsave(paste0("Boxplot_CO2MT.pdf")) 
+  ggplot2::ylim(0,100)
+ggplot2::ggsave(paste0("Boxplot_RAST.pdf")) 
 
-# Groepstatistieken van deelpopulaties SchipholTrain en rateAirplane (4.3.3)
+# Groepstatistieken van deelpopulaties SchipholTrain en rateAirplane
 psych:: describeBy(dsCase$SchipholTrain, dsCase$rateAirplane)
 
 # Uitvoeren Anova toets
-resultAov <- aov(dsCase$rateAirplane ~ dsCase$SchipholTrain)
+resultANORAST <- aov(dsCase$rateAirplane ~ dsCase$SchipholTrain)
 
-summary(resultAov)
+summary(resultANORAST)
 
 #-------------------------------------------------------------------------------------------------
 # SCHIPHOLCAR EN RATEAIRPLANE
 #------------------------------------------------------------------------------------------------
 # SchipholCar: one-way tabel met frequenties
-tabelMT <- table(dsCase$SchipholCar)
-tabelMT
+tabelSC <- table(dsCase$SchipholCar)
+tabelSC
 
-cbind(Freq = tabelMT,
-      CumFreq = cumsum(tabelMT),
-      Perc = 100*tabelMT/sum(tabelMT),
-      CumPerc = cumsum(100*tabelMT/sum(tabelMT)))
+cbind(Freq = tabelSC,
+      CumFreq = cumsum(tabelSC),
+      Perc = 100*tabelSC/sum(tabelSC),
+      CumPerc = cumsum(100*tabelSC/sum(tabelSC)))
 
-# Histogram van SchipholCar met x-as van rateAirplane met een xlim van 40 om betere verdeling weer
-# te geven zonder extreme outliers. 
+# Histogram van SchipholCar met x-as van rateAirplane met een xlim van 100 en een ylim van 45
+# om betere verdeling weer te geven zonder extreme outliers. 
 ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
   ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
   ggplot2::xlab("rateAirplane") +
   ggplot2::facet_grid(~ SchipholCar) +
-  ggplot2::xlim(0,40)
-ggplot2::ggsave(paste0("Histo_CO2MT.pdf")) 
+  ggplot2::xlim(0,100) +
+  ggplot2::ylim(0,45)
+ggplot2::ggsave(paste0("Histo_RASC.pdf")) 
 
 # Boxplot van FacSchipholCar en rateAirplane
 ggplot2::ggplot(dsCase, ggplot2::aes(x = FacSchipholCar, y=rateAirplane, fill = FacSchipholCar)) +
   ggplot2::geom_boxplot(col = "black") +
   ggplot2::ylab("SchipholCar") +
   ggplot2::xlab("rateAirplane") +
-  ggplot2::ylim(0,40)
-ggplot2::ggsave(paste0("Boxplot_CO2MT.pdf")) 
+  ggplot2::ylim(0,100)
+ggplot2::ggsave(paste0("Boxplot_RASC.pdf")) 
 
 # Groepstatistieken van deelpopulaties SchipholTrain en rateAirplane (4.3.3)
 psych:: describeBy(dsCase$SchipholCar, dsCase$rateAirplane)
 
 # Uitvoeren Anova toets
-resultAov <- aov(dsCase$rateAirplane ~ dsCase$SchipholCar)
+resultANORASC <- aov(dsCase$rateAirplane ~ dsCase$SchipholCar)
 
-summary(resultAov)
+summary(resultANORASC)
 
 #-----------------------------------------------------------------------------------------------
 # KRUISTABEL
@@ -792,20 +785,20 @@ summary(resultAov)
 
 # SCHIPHOLCAR EN SCHIPHOLTRAIN
 #-----------------------------------------------------------------------------------------------
-tbl <- table(dsCase$SchipholCar, dsCase$SchipholTrain)
-addmargins(tbl)
+tabelSCST <- table(dsCase$SchipholCar, dsCase$SchipholTrain)
+addmargins(tabelSCST)
 
-chisq.test(tbl)
-rsltChisq<-chisq.test(tbl)
-str(rsltChisq)
+chisq.test(tabelSCST)
+rsltChisqSCST<-chisq.test(tabelSCST)
+str(rsltChisqSCST)
 
-rsltChisq$statistic
-rsltChisq$parameter
-rsltChisq$p.value
+rsltChisqSCST$statistic
+rsltChisqSCST$parameter
+rsltChisqSCST$p.value
 
-cbind(ChisqStat = rsltChisq$statistic, 
-      df        = rsltChisq$parameter, 
-      ChisqSig  = rsltChisq$p.value)
+cbind(ChisqStat = rsltChisqSCST$statistic, 
+      df        = rsltChisqSCST$parameter, 
+      ChisqSig  = rsltChisqSCST$p.value)
 
 #-----------------------------------------------------------------------------------------------
 # DOORKRUISENDHEDEN EN INTERACTIES
