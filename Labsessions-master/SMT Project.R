@@ -245,31 +245,16 @@ dsCase$ImportComfort[is.na(dsCase$ImportComfort)] <-
 dsCase$Nep02[is.na(dsCase$Nep02)] <-
   round(median(dsCase$avgEnvironBelief, na.rm = TRUE))
 
-# BASEPLOT
-# -----------
+#-----------------------------------------------------------------------------------------------
+# PEARSONS CORRELATIECOËFFICIËNT BEREKENEN
+#-----------------------------------------------------------------------------------------------
+# RATEAIRPLANE EN IMPORTCOMFORT
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken van ImportComfort en rateAirplane 
 outliersICRA <- dsCase[dsCase$ImportComfort > 80 & dsCase$rateAirplane > 80,
-                   c("ImportComfort","rateAirplane")]
+                       c("ImportComfort","rateAirplane")]
 outliersICRA
 
-# ggplot aanmaken met lijn, outliers en density weergave.
-ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
-                ggplot2::geom_point(col="blue") +
-                ggplot2::labs(title = "titel") +
-                ggplot2::geom_point(data=outliersICRA, shape = 1, stroke = 1.5,
-                                     size = 10, colour="red") +
-                ggplot2::ylim(0,105) +
-                ggplot2::xlim(0,105) +
-                ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-                ggplot2::geom_density_2d(col = "magenta")
-
-# ggplot opslaan.
-ggplot2::ggsave(paste0("baseplot_1.pdf"))    
-
-# PEARSONS CORRELATIECOËFFICIËNT BEREKEN
-# --------------------------------------------------------
-# RATEAIRPLANE EN IMPORTCOMFORT
-# --------------------------------------------------
 # ggplot aanmaken met lijn, outliers en density weergave.
 ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
   ggplot2::geom_point(col="blue") +
@@ -291,8 +276,9 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # RATEAIRPLANE EN IMPORTPRICE
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers van rateAirplane en ImportPrice
 outliersIPRA <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
                        c("ImportPrice","rateAirplane")]
@@ -319,8 +305,9 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # RATEAIRPLANE & IMPORTTIME
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor rateAirplane en ImportTime
 outliersITRA <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
                        c("ImportTime","rateAirplane")]
@@ -347,8 +334,9 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # RATEAIRPLANE EN NEP (ENVIRONBELIEF)
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor rateAirplane en NEP (EnvironBelief)
 outliersEBRA <- dsCase[dsCase$avgEnvironBelief & dsCase$rateAirplane < 40,
                        c("avgEnvironBelief","rateAirplane")]
@@ -375,10 +363,10 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # GUILT (GUILTFEEL) EN NEP (ENVIRONBELIEF)
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor Guilt (GuiltFeel) en NEP (EnvironBelief)
-
 geom_sm
 
 outliersGFEB <- dsCase[dsCase$avgGuiltFeel < 2 & dsCase$avgEnvironBelief < 2,
@@ -406,11 +394,10 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # NEP (ENVIRONBELIEF) EN CO2COMPMAX
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor NEP (EnvironBelief) en CO2CompMax
-# Er zijn 10 values van kleiner dan 5 en groter dan 100 die buiten de GGplot liggen
-# dit zijn natuurlijk absolute uitbijters.
 outliersEBCO2 <- dsCase[dsCase$avgEnvironBelief < 5 & dsCase$CO2CompMax > 40,
                        c("avgEnvironBelief","CO2CompMax")]
 outliersEBCO2
@@ -436,10 +423,10 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # GUILT (GUILTFEEL) EN CO2COMPMAX
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor GuiltFeel en CO2CompMax
-
 outliersGFCO2 <- dsCase[dsCase$avgGuiltFeel < 5 & dsCase$CO2CompMax >= 30,
                        c("avgGuiltFeel","CO2CompMax")]
 outliersGFCO2
@@ -465,10 +452,10 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # BIG (PERSONAL) EN CO2COMPMAX
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor Personal en CO2CompMax
-
 outliersPSCO2 <- dsCase[dsCase$avgPersonal < 6 & dsCase$CO2CompMax > 40,
                        c("avgPersonal","CO2CompMax")]
 outliersPSCO2
@@ -494,10 +481,10 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # BIG (PERSONAL) EN GUILT (GUITLFEEL)
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor Personal en GuiltFeel
-
 outliersPSGF <- dsCase[dsCase$avgPersonal < 2 & dsCase$avgGuiltFeel < 40,
                        c("avgPersonal","avgGuiltFeel")]
 outliersPSGF
@@ -523,10 +510,10 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
+#-----------------------------------------------------------------------------------------------
 # CO2COMPMAX EN IMPORTPRICE 
-# --------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor CO2CompMax en ImportPrice
-
 outliersIPCO2 <- dsCase[dsCase$CO2CompMax > 40 & dsCase$ImportPrice < 40,
                        c("CO2CompMax","ImportPrice")]
 outliersIPCO2
@@ -552,9 +539,12 @@ dsSub <- subset(dsCase,
 Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
-
+#-----------------------------------------------------------------------------------------------
 # T-TOETS BEREKENEN
-# ------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------
+
+# RATEAIRPLANE EN MANIPINFO
+#-----------------------------------------------------------------------------------------------
 # Hier wordt een tabel van kengetallen van rateAirplane aangemaakt en een steekproef van
 # rateAirplane gedefinieerd door de uitkomsten van de group variabele ManipInfo.
 psych::describe(dsCase$rateAirplane, skew = FALSE, ranges = FALSE)
@@ -579,7 +569,9 @@ t.test(dsCase$rateAirplane ~ dsCase$ManipInfo)
 # Mann-Whitney toets uitvoeren
 wilcox.test(dsCase$rateAirplane ~ dsCase$ManipInfo)
 
-
+#-----------------------------------------------------------------------------------------------
+# IMPORTTIME EN MANIPINFO
+#-----------------------------------------------------------------------------------------------
 
 -# Hier wordt een tabel van kengetallen van ImportTime aangemaakt en een steekproef van
 # ImportTime gedefinieerd door de uitkomsten van de group variabele ManipInfo.
@@ -606,10 +598,12 @@ t.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 # Mann-Whitney toets uitvoeren
 wilcox.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 
+#-----------------------------------------------------------------------------------------------
 # ONEWAY ANOVA
-# ------------------------------------------------------------
-# ManipTax en CO2CompMax
-# ------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------
+
+# MANIPTAX EN CO2COMPMAX
+#-----------------------------------------------------------------------------------------------
 # ManipTax: one-way tabel met frequenties
 tabelMT <- table(dsCase$ManipTax)
 tabelMT
@@ -645,8 +639,8 @@ resultAov <- aov(dsCase$CO2CompMax ~ dsCase$ManipTax)
 summary(resultAov)
 
 #-------------------------------------------------------------------------------------------------
-# ManipTax en ImportPrice
-# ------------------------------------------------------------
+# MANIPTAX EN IMPORTPRICE
+#-----------------------------------------------------------------------------------------------
 # ManipTax: one-way tabel met frequenties
 tabelMT <- table(dsCase$ManipTax)
 tabelMT
@@ -682,8 +676,8 @@ resultAov <- aov(dsCase$ImportPrice ~ dsCase$ManipTax)
 summary(resultAov)
 
 #-------------------------------------------------------------------------------------------------
-# ManipDest en rateAirplane
-# ------------------------------------------------------------
+# MANIPDEST EN RATEAIRPLANE
+#-----------------------------------------------------------------------------------------------
 # ManipDest: one-way tabel met frequenties
 tabelMT <- table(dsCase$ManipDest)
 tabelMT
@@ -719,8 +713,8 @@ resultAov <- aov(dsCase$rateAirplane ~ dsCase$ManipDest)
 summary(resultAov)
 
 #-------------------------------------------------------------------------------------------------
-# SchipholTrain en rateAirplane
-# ------------------------------------------------------------
+# SCHIPHOLTRAIN EN RATEAIRPLANE
+#-----------------------------------------------------------------------------------------------
 # SchipholTrain: one-way tabel met frequenties
 tabelMT <- table(dsCase$SchipholTrain)
 tabelMT
@@ -756,8 +750,8 @@ resultAov <- aov(dsCase$rateAirplane ~ dsCase$SchipholTrain)
 summary(resultAov)
 
 #-------------------------------------------------------------------------------------------------
-# SchipholCar en rateAirplane
-# ------------------------------------------------------------
+# SCHIPHOLCAR EN RATEAIRPLANE
+#------------------------------------------------------------------------------------------------
 # SchipholCar: one-way tabel met frequenties
 tabelMT <- table(dsCase$SchipholCar)
 tabelMT
@@ -792,11 +786,13 @@ resultAov <- aov(dsCase$rateAirplane ~ dsCase$SchipholCar)
 
 summary(resultAov)
 
+#-----------------------------------------------------------------------------------------------
 # KRUISTABEL
-#--------------------------------------------------------------
-# SchipholCar en rateAirplane
-#--------------------------------------------------------------
-tbl <- table(dsCase$SchipholCar, dsCase$rateAirplane)
+#-----------------------------------------------------------------------------------------------
+
+# SCHIPHOLCAR EN SCHIPHOLTRAIN
+#-----------------------------------------------------------------------------------------------
+tbl <- table(dsCase$SchipholCar, dsCase$SchipholTrain)
 addmargins(tbl)
 
 chisq.test(tbl)
@@ -811,67 +807,15 @@ cbind(ChisqStat = rsltChisq$statistic,
       df        = rsltChisq$parameter, 
       ChisqSig  = rsltChisq$p.value)
 
-# Base plot van ImportTime en rateAirplane
-# Outliers aanmaken. 
-outliers <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
-                   c("ImportTime","rateAirplane")]
-outliers
-
-# ggplot aanmaken met lijn, outliers en density weergave.
-ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
-  ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "titel") +
-  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
-                      size = 10, colour="red") +
-  ggplot2::ylim(0,105) +
-  ggplot2::xlim(0,105) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
-
-# Base plot van ImportPrice en rateAirplane
-# Outliers aanmaken. 
-outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
-                   c("ImportPrice","rateAirplane")]
-outliers
-
-# ggplot aanmaken met lijn, outliers en density weergave.
-ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
-  ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "titel") +
-  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
-                      size = 10, colour="red") +
-  ggplot2::ylim(0,105) +
-  ggplot2::xlim(0,105) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
-
-# Base plot van ImportPrice en CO2CompMax DIT LUKT NIET
-# Outliers aanmaken. 
-outliers <- dsCase[dsCase$ImportPrice < 40 & dsCase$CO2CompMax > 30,
-                   c("ImportPrice","CO2CompMax")]
-outliers
-
-# ggplot aanmaken met lijn, outliers en density weergave.
-ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
-  ggplot2::geom_point(col="blue") +
-  ggplot2::labs(title = "titel") +
-  ggplot2::geom_point(data=outliers, shape = 1, stroke = 1.5,
-                      size = 10, colour="red") +
-  ggplot2::ylim(0,105) +
-  ggplot2::xlim(0,105) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
-
-
-#-----------------------------------
+#-----------------------------------------------------------------------------------------------
 # DOORKRUISENDHEDEN EN INTERACTIES
-#-----------------------------------
+#-----------------------------------------------------------------------------------------------
 # Lu en Iris nog aan werken. 
 
 
-#-----------------------
+#-----------------------------------------------------------------------------------------------
 # MEERVOUDIGE SAMENHANG
-#-----------------------
+#-----------------------------------------------------------------------------------------------
 # Factoren aanmaken
 FacManipInfo <- factor(dsCase$ManipInfo,labels=c("Yes", "No"))
 levels(FacManipInfo)
@@ -905,7 +849,7 @@ ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel +
   lm(ModelB, data=dsCase)
   rsltC<- lm(ModelB, data=dsCase)
 
-#----------------------------------
+#-----------------------------------------------------------------------------------------------
 # REGRESSIE ANALYSE
-#----------------------------------
+#-----------------------------------------------------------------------------------------------
 
