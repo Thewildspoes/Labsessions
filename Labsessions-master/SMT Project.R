@@ -128,10 +128,10 @@ dsCase$avgPersonal <- rsltPersonal$scores
 
 str(rsltPersonal)
 
-#----------------------------------
-# BESCHRIJVENDE ANALYSE 
-#----------------------------------
-# de Tabel wordt hier aangemaakt
+#-------------------------------------------------
+# BESCHRIJVENDE ANALYSE / UNIVARIAAT KWANTITATIEF
+#-------------------------------------------------
+# De Tabel wordt hier aangemaakt
 tbl <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
                           "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
                           "avgPersonal")], skew=FALSE)
@@ -186,23 +186,38 @@ names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
 ModeavgPersonal <- table(dsCase$avgPersonal)
 names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
 
-#----------------------------------
-# INTERVALSCHATTING
-#----------------------------------
-# Hier worden alle kwantitatieve variabelen gepakt
-tbl <- tbl[, c(2:4)]
-alpha <- 0.05
-tbl$t_crit <- qt(1 - alpha/2, tbl$n - 1)
+#---------------------------------------
+# INTERVALSCHATTING KWANTITATIEVE VARS.
+#---------------------------------------
+# Aanmaken Alpha
+alpha <- 0.05 
 
-# De upper en lower bound worden aangemaakt.
-tbl$CI_low <- tbl$mean - tbl$t_crit*tbl$sd/sqrt(tbl$n)
-tbl$CI_upp <- tbl$mean + tbl$t_crit*tbl$sd/sqrt(tbl$n)
+# Tabel aanmaken met alle kwantitatieve variabelen
+tblInterSchat <- psych::describe(dsCase[c("CO2CompMax", "rateAirplane", "ImportTime", 
+                                          "ImportPrice", "ImportComfort", "avgGuiltFeel", 
+                                          "avgEnvironBelief", "avgPersonal")],
+                          skew = FALSE, ranges = FALSE)
 
+# Alle belangrijke kolommen uit tabel selecteren
+tblInterSchat <- tblInterSchat[c(2:4)]
 
-#De tabel wordt geexporteerd als CSV file. 
+# Berekening van Kritieke Waarden
+tblInterSchat$t_crit <- qt(1 - alpha/2, tblInterSchat$n - 1)
+
+# Berekening lower en upper bounds
+tblInterSchat$CI_low <- tblInterSchat$mean - tblInterSchat$t_crit*tbl$sd/sqrt(tblInterSchat$n)
+tblInterSchat$CI_upp <- tblInterSchat$mean + tblInterSchat$t_crit*tbl$sd/sqrt(tblInterSchat$n)
+
+tblInterSchat
+
+myVars <- c("CO2CompMax", "rateAirplane", "ImportTime", 
+            "ImportPrice", "ImportComfort", "avgGuiltFeel", 
+            "avgEnvironBelief", "avgPersonal")
+
 library(stargazer)
-tbl <- psych::describe(dsCase[VarsBA], skew = FALSE, ranges = FALSE)
-write.csv2(tbl, file = "Interval_BA.csv")
+tblInterSchat <- describe(dsCase[myVars], skew = FALSE, ranges = FALSE)
+write.csv2(tblInterSchat, file = "IntervalSchatting_tbl.csv")
+
 
 #----------------------------------
 # UITBIJTERANALYSE
@@ -223,7 +238,7 @@ dsCase$ImportTime[is.na(dsCase$ImportTime)] <-
   round(mean(dsCase$ImportTime, na.rm=TRUE))
 dsCase$ImportComfort[is.na(dsCase$ImportComfort)] <-
   round(mean(dsCase$ImportComfort, na.rm=TRUE))
-dsCase$Nep02[is.na(dsVase$Nep02)] <-
+dsCase$Nep02[is.na(dsCase$Nep02)] <-
   round(median(dsCase$avgEnvironBelief, na.rm = TRUE))
 
 # BASEPLOT
@@ -507,7 +522,7 @@ Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 # CO2COMPMAX EN IMPORTPRICE 
 # --------------------------------------------------
 # Outliers aanmaken voor CO2CompMax en ImportPrice
-colSums(is.na(dsCase))
+
 outliersIPCO2 <- dsCase[dsCase$CO2CompMax > 40 & dsCase$ImportPrice < 40,
                        c("CO2CompMax","ImportPrice")]
 outliersIPCO2
@@ -534,21 +549,29 @@ Hmisc::rcorr(as.matrix(dsSub), type=c("spearman"))
 Hmisc::rcorr(as.matrix(dsSub), type="pearson")
 
 
-#T-TOETS BEREKENEN
+# T-TOETS BEREKENEN
 # ------------------------------------------------------------
-psych::describe(dsSub$rateAirplane, skew = FALSE, ranges = FALSE)
-psych::describeBy(dsSub$rateAirplane, group=dsSub$ManipDest, skew=FALSE, range=FALSE)
+# Hier wordt een tabel van kengetallen van rateAirplane aangemaakt en een steekproef van
+# rateAirplane gedefinieerd door de uitkomsten van de group variabele ManipDest.
+psych::describe(dsCase$rateAirplane, skew = FALSE, ranges = FALSE)
+psych::describeBy(dsCase$rateAirplane, group=dsCase$ManipDest, skew=FALSE, range=FALSE)
 
-tmp <- psych::describeBy(dsSub$rateAirplane, group=dsSub$ManipDest,
+# Kengetallen uit steekproef worden in template gezet.
+templateRateAir <- psych::describeBy(dsCase$rateAirplane, group=dsCase$ManipDest,
                   skew=FALSE, range = FALSE)
-utils::str(tmp)
+
+# template wordt verbonden tot duidelijke tabel.
+utils::str(templateRateAir)
 rbind(
-  as.data.frame(tmp$"1"),
-  as.data.frame(tmp$"2")
+  data.frame(ManipDest=1, templateRateAir$"1"),
+  data.frame(ManipDest=2, templateRateAir$"2"),
+  data.frame(ManipDest=3, templateRateAir$"3"))
 
 
-#One-Way anova
-#ManipInfo en rateAirplane
+# ONEWAY ANOVA
+# ------------------------------------------------------------
+# ManipInfo en rateAirplane
+# ------------------------------------------------------------
 # Histogram
 ggplot(dsCase, aes(x = rateAirplane)) +
   geom_histogram(bins=15, fill = "darkgreen", col = "black") +
@@ -581,12 +604,16 @@ ggplot(dsCase, aes(x =ManipInfo, y=rateAirplane)) +
                fun.y=mean, colour="red", size=7, shape = 15,
                geom="point")
 
-# Uitvoeren one-way Anova
-
-
 #ManipTax en CO2CompMax
+# ------------------------------------------------------------
+
+
 #ManipInfo en Import
-  
+# ------------------------------------------------------------
+
+
+
+
 # Base plot van ImportTime en rateAirplane
 # Outliers aanmaken. 
 outliers <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
