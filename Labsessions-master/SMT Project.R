@@ -199,6 +199,8 @@ names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
 ModeavgPersonal <- table(dsCase$avgPersonal)
 names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
 
+
+
 #---------------------------------------
 # INTERVALSCHATTING KWANTITATIEVE VARS.
 #---------------------------------------
@@ -392,8 +394,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportComfort, y=rateAirplane)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
   ggplot2::xlim(0,105) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_ICRA.pdf")) 
@@ -421,8 +422,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=rateAirplane)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
   ggplot2::xlim(0,105) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_IPRA.pdf")) 
@@ -450,8 +450,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportTime, y=rateAirplane)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
   ggplot2::xlim(0,105) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_ITRA.pdf")) 
@@ -479,8 +478,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=rateAirplane)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,105) +
   ggplot2::xlim(0,6.5) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_EBRA.pdf")) 
@@ -510,8 +508,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=avgEnvironBelief)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,6.5) +
   ggplot2::xlim(0,5) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_GFEB.pdf")) 
@@ -539,8 +536,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgEnvironBelief, y=CO2CompMax)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
   ggplot2::xlim(0,7.5) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_EBCO2.pdf")) 
@@ -568,8 +564,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=CO2CompMax)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
   ggplot2::xlim(0,7) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE)
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_GFCO2.pdf")) 
@@ -597,8 +592,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=CO2CompMax)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
   ggplot2::xlim(1.9,5) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) 
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_PSCO2.pdf")) 
@@ -626,8 +620,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=avgPersonal, y=avgGuiltFeel)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0.5,5) +
   ggplot2::xlim(2,5) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) 
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_PSGF.pdf")) 
@@ -655,8 +648,7 @@ ggplot2::ggplot(dsCase, ggplot2::aes(x=ImportPrice, y=CO2CompMax)) +
                       size = 10, colour="red") +
   ggplot2::ylim(0,55) +
   ggplot2::xlim(0,100) +
-  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) +
-  ggplot2::geom_density_2d(col = "magenta")
+  ggplot2::geom_smooth(method = lm, col = "green", lwd = 1.0, se = FALSE) 
 
 # ggplot opslaan.
 ggplot2::ggsave(paste0("Plot_IPCO2.pdf")) 
