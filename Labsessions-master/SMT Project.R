@@ -1116,9 +1116,9 @@ ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel +
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-# setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-setwd("/Users/amaniberkhof/Documents/Labsessions")
+# setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
@@ -2039,6 +2039,10 @@ cbind(ChisqStat = rsltChisqSCST$statistic,
 # DOORKRUISENDHEDEN EN INTERACTIES
 #-----------------------------------------------------------------------------------------------
 # Partiële correlatie
+#doorkruisende effecten van een derde variabele
+#anova met covariaat, om doorkruisendheid te meten
+#two-way anova meet je het interactie effect van een kwalitatieve 
+#alle ? betekenen willen we zien of hij wordt verstoord door de vars waar een z bij staat.
 #-----------------------------------------------------------------------------------------------
 # Nep opschonen voor de relatie tussen Guilt en CO2CompMax
 
