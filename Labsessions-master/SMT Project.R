@@ -54,7 +54,7 @@ library(gmodels)
 # Hier wordt het Hmisc pakket eenmalig geinstalleerd.
 # Wordt gebruikt voor correlatie test informatie.
 # "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
-#install.packages("Hmisc", dependencies = TRUE)
+# install.packages("Hmisc", dependencies = TRUE)
 library(Hmisc)
 
 # Hier wordt het lmtest pakket eenmalig geinstalleerd.
@@ -986,4 +986,48 @@ ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel +
 #-----------------------------------------------------------------------------------------------
 # REGRESSIE ANALYSE
 #-----------------------------------------------------------------------------------------------
+# Factoren aanmaken
+  
+dsCase$ManipDest <- factor(dsCase$ManipDest,
+                           levels = c(1:3), 
+                           labels = c("Londen", "Berlin", "Marseille"))
+dsCase$ManipInfo <- factor(dsCase$ManipInfo, 
+                           levels = c(1:2), 
+                           labels = c("No information on travel time", 
+                                      "Information on travel time"))
+
+dsCase$ManipTax <- factor(dsCase$ManipTax, 
+                          levels = c(1:3), 
+                          labels = c("only price flight ticket", 
+                                     "price flight ticket including tax", 
+                                     "price including high tax"))
+dsCase$SchipholCar <- factor(dsCase$SchipholCar,
+                             levels = c(1:5),
+                             labels = c("< 30 min", "30-45 min", "45-60 min", "> 60 min",
+                                        "i do not have the option to go by car")) 
+
+dsCase$SchipholTrain <- factor(dsCase$SchipholTrain,
+                               levels = c(1:4),
+                               labels = c("< 30 min", "30-45 min", "45-60 min", "> 60 min"))
+
+levels(dsCase$f.ManipDest)
+levels(dsCase$f.ManipInfo)
+levels(dsCase$f.ManipTax)
+levels(dsCase$f.SchipholCar)
+levels(dsCase$f.SchipholTrain)
+
+
+#----------------------------------------------------------------------------------------------
+# Regressiemodel RateAirplane
+mdlA <- rateAirplane ~ f.SchipholCar + f.SchipholTrain +
+  ImportTime + f.ManipInfo + ImportComfort + 
+  ImportPrice + avgPersonal
+
+lm(mdlA, data =dsCase)
+rsltA <- lm(mdlA, data =dsCase)
+str(mdlA)
+
+
+
+
 
