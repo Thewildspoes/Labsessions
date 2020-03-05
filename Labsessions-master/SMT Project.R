@@ -1027,7 +1027,10 @@ lm(mdlA, data =dsCase)
 rsltA <- lm(mdlA, data =dsCase)
 str(mdlA)
 
-
+stargazer::stargazer(rsltA, 
+          title="Regressieresultaten voor rateTrain",
+          no.space=TRUE, align = TRUE,
+          intercept.bottom = FALSE)
 
 
 
