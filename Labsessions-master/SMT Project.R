@@ -277,6 +277,7 @@ write.csv2(tblInterSchat, file = "IntervalSchatting_tbl.csv")
 zCO2CompMax <- scale(dsCase$CO2CompMax)
 which(zCO2CompMax>3)
 which(abs(zCO2CompMax)>3)
+zCO2CompMax
 
 zrateAirplane <- scale(dsCase$rateAirplane)
 which(zrateAirplane>3)
@@ -297,6 +298,7 @@ which(abs(zImportTime)>3)
 zavgEnvironBelief <- scale(dsCase$avgEnvironBelief)
 which(zavgEnvironBelief>3)
 which(abs(zavgEnvironBelief)>3)
+zavgEnvironBelief
 
 zavgGuiltFeel <- scale(dsCase$avgGuiltFeel)
 which(zavgGuiltFeel>3)
@@ -313,7 +315,8 @@ CO2CompMaxBefore <- mean(dsCase$CO2CompMax, na.rm=TRUE)
 
 CO2CompMaxAfter <- mean(dsCase$CO2CompMax[-which(abs(zCO2CompMax)>3)],
                         na.rm=TRUE)
-
+CO2CompMaxBefore
+CO2CompMaxAfter
 cat("Absolute difference after and before",
     (CO2CompMaxAfter - CO2CompMaxBefore))
 cat("Relative difference after and before (in pct)",
@@ -335,7 +338,8 @@ ImportComfortBefore <- mean(dsCase$ImportComfort, na.rm=TRUE)
 
 ImportComfortAfter <- mean(dsCase$ImportComfort[-which(abs(zImportComfort)>3)],
                            na.rm=TRUE)
-
+ImportComfortBefore
+ImportComfortAfter
 cat("Absolute difference after and before",
     (ImportComfortAfter - ImportComfortBefore))
 cat("Relative difference after and before (in pct)",
@@ -347,7 +351,8 @@ ImportPriceBefore <- mean(dsCase$ImportPrice, na.rm=TRUE)
 
 ImportPriceAfter <- mean(dsCase$ImportPrice[-which(abs(zImportPrice)>3)],
                          na.rm=TRUE)
-
+ImportPriceBefore
+ImportPriceAfter
 cat("Absolute difference after and before",
     (ImportPriceAfter - ImportPriceBefore))
 cat("Relative difference after and before (in pct)",
@@ -358,7 +363,8 @@ ImportTimeBefore <- mean(dsCase$ImportTime, na.rm=TRUE)
 
 ImportTimeAfter <- mean(dsCase$ImportTime[-which(abs(zImportTime)>3)],
                         na.rm=TRUE)
-
+ImportTimeBefore
+ImportTimeAfter
 cat("Absolute difference after and before",
     (ImportTimeAfter - ImportTimeBefore))
 cat("Relative difference after and before (in pct)",
@@ -1005,11 +1011,20 @@ Anova(rslt2AOVCOAfter,type=c("III"))
 
 # ANALYSE VAN DEELPOPULATIES
 #-----------------------------------------------------------------------------------------------
+summary(aov(rateAirplane ~ FacManipInfo, data = dsCase))
+
+tblDeelPop <- table(FacManipInfo, dsCase$ImportTime)
+chisq.test(tblDeelPop)
+
+summary(aov(rateAirplane ~ ImportTime, data = dsCase))
+
+by(dsCase, FacManipInfo, function(x) summary(aov(rateAirplane ~ ImportTime, data = x)))
+
 # Voor purgen kwantitatieve variabelen:
-rcorr(as.matrix(dsCase[c("ImportTime","rateAirplane")]))
+rcorr(as.matrix(dsCase[c("rateAirplane","ImportTime")]))
 
 # Na purgen kwantitatieve variabelen:
-by(dsCase[c("ImportTime","rateAirplane")],
+by(dsCase[c("rateAirplane","ImportTime")],
    FacManipInfo,
    function(x) rcorr(as.matrix(x)))
 
@@ -1019,11 +1034,21 @@ by(dsCase[c("ImportTime","rateAirplane")],
 dsSubDKH <- subset(dsCase,
                    select=c("avgGuiltFeel", "CO2CompMax", "avgPersonal"))
 
-ppcor::pcor.test(dsCase$avgGuiltFeel, dsCase$CO2CompMax, dsCase$avgPersonal)
+ppcor::pcor.test(dsCase$avgPersonal, dsCase$CO2CompMax, dsCase$avgGuiltFeel)
 
 Hmisc::rcorr(as.matrix(dsSubDKH), type="pearson")
 
 Hmisc::rcorr(as.matrix(dsSubDKH))
+
+
+dsSubDKH2 <- subset(dsCase,
+                   select=c("avgEnvironBelief", "CO2CompMax", "avgGuiltFeel"))
+
+ppcor::pcor.test(dsCase$avgEnvironBelief, dsCase$CO2CompMax, dsCase$avgGuiltFeel)
+
+Hmisc::rcorr(as.matrix(dsSubDKH2), type="pearson")
+
+Hmisc::rcorr(as.matrix(dsSubDKH2))
 
 #-----------------------------------------------------------------------------------------------
 # MEERVOUDIGE SAMENHANG
@@ -1033,22 +1058,117 @@ levels(FacManipDest)
 levels(FacManipInfo)
 levels(FacManipTax)
 levels(FacSchipholCar)
-levels(FacSchipholTrain)
+levels(FacSchipholTrain) 
 
 #------------------------------------------------------------------------------------
 # Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
-# Regressie rateAirplane 
+# REGRESSIE RATEAIRPLANE
+# Causaal relatieschema
+#------------------------------------------------------------------------------------
 ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
-  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
+          ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
 lm(ModelA, data=dsCase)
 
 rsltA<- lm(ModelA, data=dsCase)
 
 summary(rsltA)
-vif(rsltA)
-1 /vif(rsltA) 
 
-# Regressie CO2CompMax
+stargazer::stargazer(rsltA,
+                     title="Regressieresultaten voor rateAirplane",
+                     no.space=TRUE, align = TRUE,
+                     intercept.bottom = FALSE)
+
+# Residuen analyse
+yhat <- fitted(rsltA)
+ehat <- residuals(rsltA) 
+sighat <- summary(rsltA)$sigma
+
+str(influence(rsltA)) 
+hlev <- influence(rsltA)
+hlev <- unlist(hlev)
+
+sum(hlev)
+
+zresid <- ehat/sd(ehat)
+sresid <- rstandard(rsltA) 
+sdresid <- rstudent(rsltA)
+
+cbind(Obs = as.numeric(rownames(dsCase)),
+      SDresid = sdresid,
+      IntentContract.obs = dsCase$rateAirplane,
+      IntentContract.pred = yhat,
+      IntentContract.resid = ehat)[abs(sdresid)>2.5,]
+
+
+regByProducts <- cbind("Predicted values" = yhat,
+                       "Std Predicted value" = (yhat-mean(yhat))/sd(yhat),
+                       "Residual" = ehat,
+                       "Std Residual (zresid)" = zresid,
+                       "Stud Residual (sresid)" = sresid,
+                       "Stud Deleted Residual" = sdresid,
+                       "Cook’s Distance" = cooks.distance(rsltA),
+                       "Centered Leverage value"= hlev)
+
+tmp <- psych::describe(regByProducts)
+
+class(tmp) <- class(tmp)[c(3,1,2)]
+
+round(tmp[c(2,8,9,3,4)], 3)
+
+hist(sdresid, col="red",
+     main="Histogram of residuals (sdresid)")
+
+alpha <- 0.05
+df <- rsltA$df.residual
+abline(v=qt(alpha/2, df=df),lty=2,col="blue",lwd=2)
+abline(v=qt(1-alpha/2, df=df),lty=2,col="blue",lwd=2)
+
+# Niet-lineariteit
+
+# Set parameters for the reference lines
+alpha <- 0.05
+df <- rsltA$df.residual
+
+# ggplot rateAirplane en gestudentiseerde residuen
+ggplot2::ggplot(data.frame(yhat, sdresid), ggplot2::aes(x=yhat, y=sdresid)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_hline(yintercept=0, colour="red", size = 1) +
+  ggplot2::geom_hline(yintercept=qt(alpha/2,df), linetype=2,
+                      colour="blue", size = 1) +
+  ggplot2::geom_hline(yintercept=qt(1-alpha/2,df), linetype=2,
+                      colour="blue", size = 1)
+
+mdlA.adj <- update(mdlA, ~ . + I(ImportTime^2) + 
+                     I(ImportComfort^2) + (ImportPrice^2) + (avgEnvironBelief^2))
+
+# Opsporen niet-lineariteit
+summary(lm(mdlA,data=dsCase))
+summary(lm(mdlA.adj,data=dsCase))
+
+# Durbin Watson toetsgrootheid
+lmtest::dwtest(rsltA)
+
+# Toevoegen avgGuilt en avgPersonal
+ModelQ <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
+  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief + avgGuiltFeel + avgPersonal
+
+
+rsltQ <- lm(ModelQ,data=dsCase)
+
+summary(rsltQ)
+
+# Testen van interactie ImportTime en ManipInfo
+ModelP <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime * 
+  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief 
+
+rsltP <- lm(ModelP,data=dsCase)
+
+summary(rsltP)
+
+
+# REGRESSIE CO2COMPMAX
+# Causaal relatieschema
+#------------------------------------------------------------------------------------
 ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
   avgPersonal + ImportPrice + ManipTax
 lm(ModelB, data=dsCase)
@@ -1056,10 +1176,101 @@ rsltB<- lm(ModelB, data=dsCase)
 
 summary(rsltB)
 
-#----------------------------------------------------------------------------------------------
-# Regressiemodel RateAirplane
-mdlA <- rateAirplane ~ FacSchipholCar + FacSchipholTrain +
-  ImportTime + FacManipInfo + ImportComfort + 
-  ImportPrice + avgPersonal + FacManipDest
+stargazer::stargazer(rsltB,
+                     title="Regressieresultaten voor CO2CompMax",
+                     no.space=TRUE, align = TRUE,
+                     intercept.bottom = FALSE)
+
+# Residuen analyse
+yhat <- fitted(rsltB)
+ehat <- residuals(rsltB) 
+sighat <- summary(rsltB)$sigma
+
+str(influence(rsltB)) 
+hlev <- influence(rsltB)
+hlev <- unlist(hlev)
+
+sum(hlev)
+
+zresid <- ehat/sd(ehat)
+sresid <- rstandard(rsltB) 
+sdresid <- rstudent(rsltB)
+
+cbind(Obs = as.numeric(rownames(dsCase)),
+      SDresid = sdresid,
+      IntentContract.obs = dsCase$CO2CompMax,
+      IntentContract.pred = yhat,
+      IntentContract.resid = ehat)[abs(sdresid)>2.5,]
+
+
+regByProducts <- cbind("Predicted values" = yhat,
+                       "Std Predicted value" = (yhat-mean(yhat))/sd(yhat),
+                       "Residual" = ehat,
+                       "Std Residual (zresid)" = zresid,
+                       "Stud Residual (sresid)" = sresid,
+                       "Stud Deleted Residual" = sdresid,
+                       "Cook’s Distance" = cooks.distance(rsltB),
+                       "Centered Leverage value"= hlev)
+
+tmp <- psych::describe(regByProducts)
+
+class(tmp) <- class(tmp)[c(3,1,2)]
+
+round(tmp[c(2,8,9,3,4)], 3)
+
+hist(sdresid, col="red",
+     main="Histogram of residuals (sdresid)")
+
+alpha <- 0.05
+df <- rsltB$df.residual
+abline(v=qt(alpha/2, df=df),lty=2,col="blue",lwd=2)
+abline(v=qt(1-alpha/2, df=df),lty=2,col="blue",lwd=2)
+
+# Niet-lineariteit
+
+# Set parameters for the reference lines
+alpha <- 0.05
+df <- rsltB$df.residual
+
+# ggplot CO2CompMax en gestudentiseerde residuen
+ggplot2::ggplot(data.frame(yhat, sdresid), ggplot2::aes(x=yhat, y=sdresid)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_hline(yintercept=0, colour="red", size = 1) +
+  ggplot2::geom_hline(yintercept=qt(alpha/2,df), linetype=2,
+                      colour="blue", size = 1) +
+  ggplot2::geom_hline(yintercept=qt(1-alpha/2,df), linetype=2,
+                      colour="blue", size = 1)
+
+ModelB.adj <- update(ModelB, ~ . + I(avgEnvironBelief^2) + I(avgGuiltFeel^2) + 
+                     I(avgPersonal^2) + (ImportPrice^2))
+
+# Opsporen niet-lineariteit
+summary(lm(ModelB,data=dsCase))
+summary(lm(ModelB.adj,data=dsCase))
+
+# Durbin Watson toetsgrootheid
+lmtest::dwtest(rsltB)
+
+# Toevoegen avgGuilt en avgPersonal
+ModelQ2 <- CO2CompMax ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
+  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief + avgGuiltFeel + avgPersonal
+
+
+rsltQ2 <- lm(ModelQ2,data=dsCase)
+
+# Testen van interactie Nep en Guilt
+ModelP2 <- CO2CompMax ~ avgEnvironBelief * avgGuiltFeel + 
+  avgPersonal + ImportPrice + ManipTax
+
+rsltP2 <- lm(ModelP2,data=dsCase)
+
+summary(rsltP2)
+
+
+summary(rsltQ2)
+
+#------------------------------------------------------------------------------------
+#                                   EINDE SMT CASE
+#------------------------------------------------------------------------------------
 
 
