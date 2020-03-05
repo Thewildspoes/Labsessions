@@ -964,6 +964,22 @@ cbind(ChisqStat = rsltChisqSCST$statistic,
 #-----------------------------------------------------------------------------------------------
 # DOORKRUISENDHEDEN EN INTERACTIES
 #-----------------------------------------------------------------------------------------------
+# TWO-WAY ANOVA
+#-----------------------------------------------------------------------------------------------
+# Two-Way Anova SchipholCar, rateAirplane --> ManipTax
+anova(aov(rateAirplane ~ FacSchipholCar * FacManipTax, data = dsCase))
+anova(aov(rateAirplane ~ FacSchipholCar + FacManipTax, data = dsCase))
+
+# Type III Anova
+rsltAOV <- aov(rateAirplane ~ FacSchipholCar * FacManipTax,
+               data=dsCase)
+
+Anova(rsltAOV,type=c("III"))
+
+
+# Pearsons Correlatie Coefficient
+
+
 # Partiële correlatie
 #doorkruisende effecten van een derde variabele
 #anova met covariaat, om doorkruisendheid te meten
@@ -1020,9 +1036,9 @@ levels(FacSchipholTrain)
 
 #----------------------------------------------------------------------------------------------
 # Regressiemodel RateAirplane
-mdlA <- rateAirplane ~ f.SchipholCar + f.SchipholTrain +
-  ImportTime + f.ManipInfo + ImportComfort + 
-  ImportPrice + avgPersonal
+mdlA <- rateAirplane ~ FacSchipholCar + FacSchipholTrain +
+  ImportTime + FacManipInfo + ImportComfort + 
+  ImportPrice + avgPersonal + FacManipDest
 
 lm(mdlA, data =dsCase)
 rsltA <- lm(mdlA, data =dsCase)
