@@ -1014,6 +1014,7 @@ levels(FacSchipholTrain)
 #------------------------------------------------------------------------------------
 # Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
 # Regressie rateAirplane 
+# Causaal relatieschema
 ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
   ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
 lm(ModelA, data=dsCase)
@@ -1022,7 +1023,14 @@ rsltA<- lm(ModelA, data=dsCase)
 
 summary(rsltA)
 
+stargazer::stargazer(rsltA,
+          title="Regressieresultaten voor rateAirplane",
+          no.space=TRUE, align = TRUE,
+          intercept.bottom = FALSE)
+
+
 # Regressie CO2CompMax
+# Causaal relatieschema
 ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
   avgPersonal + ImportPrice + ManipTax
 lm(ModelB, data=dsCase)
@@ -1030,8 +1038,7 @@ rsltB<- lm(ModelB, data=dsCase)
 
 summary(rsltB)
 
-#----------------------------------------------------------------------------------------------
-# Regressiemodel RateAirplane
-mdlA <- rateAirplane ~ FacSchipholCar + FacSchipholTrain +
-  ImportTime + FacManipInfo + ImportComfort + 
-  ImportPrice + avgPersonal + FacManipDest
+stargazer::stargazer(rsltB,
+                     title="Regressieresultaten voor CO2CompMax",
+                     no.space=TRUE, align = TRUE,
+                     intercept.bottom = FALSE)
