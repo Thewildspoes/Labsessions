@@ -144,11 +144,11 @@ str(rsltPersonal)
 #-------------------------------------------------
 # BESCHRIJVENDE ANALYSE / UNIVARIAAT KWANTITATIEF
 #-------------------------------------------------
-# De Tabel wordt hier aangemaakt
-tbl <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
+# De tabel wordt hier aangemaakt
+tblBS <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
                                   "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
                                   "avgPersonal")], skew=FALSE)
-print(tbl, digits=3)
+print(tblBS, digits=3)
 
 # Dit stuk code zorgt ervoor dat de net aangemaakte tabel wordt geexporteert. 
 setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
@@ -158,6 +158,25 @@ VarsBA <- c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain",
 
 library(stargazer)
 stargazer(dsCase[VarsBA], type="html", out="Tabel_BeschrijvendeAnalyse.doc")
+
+# Factoren aanmaken
+FacManipInfo <- factor(dsCase$ManipInfo,labels=c("Yes", "No"))
+levels(FacManipInfo)
+
+FacManipTax <- factor(dsCase$ManipTax,labels=c("only price flight ticket", 
+                                               "price flight ticket including low tax", 
+                                               "price including high tax"))
+levels(FacManipTax)
+
+FacManipDest <- factor(dsCase$ManipDest, labels=c("Berlin", "London", "Marseille"))
+levels(FacManipDest)
+
+FacSchipholCar <- factor(dsCase$SchipholCar,labels=c("<30", "30-45", 
+                                                     "45-60",">60", "no car"))
+levels(FacSchipholCar)
+
+FacSchipholTrain<-factor(dsCase$SchipholTrain, labels=c("<30", "30-45", "45-60",">60"))
+levels(FacSchipholTrain)
 
 # Hier wordt de mediaan berekent voor ManipDest / ManipInfo / ManipTax / 
 # Schiphol Train / SchipholCar / Alle items van NEP / Alle items van GuiltFeel
@@ -199,7 +218,24 @@ names(ModeavgGuiltFeel)[ModeavgGuiltFeel==max(ModeavgGuiltFeel)]
 ModeavgPersonal <- table(dsCase$avgPersonal)
 names(ModeavgPersonal)[ModeavgPersonal==max(ModeavgPersonal)]
 
+# Frequenties van ManipDest / ManipTax / ManipInfo
+tblManipDest <- table(dsCase$ManipDest)
+round(cbind(Freq = tblManipDest,
+            CumFreq = cumsum(tblManipDest),
+            RelFreq = 100*tblManipDest/sum(tblManipDest),
+            CumRelFreq = 100*cumsum(tblManipDest)/sum(tblManipDest)), 3)
 
+tblManipTax <- table(dsCase$ManipTax)
+round(cbind(Freq = tblManipTax,
+            CumFreq = cumsum(tblManipTax),
+            RelFreq = 100*tblManipTax/sum(tblManipTax),
+            CumRelFreq = 100*cumsum(tblManipTax)/sum(tblManipTax)), 3)
+
+tblManipInfo <- table(dsCase$ManipInfo)
+round(cbind(Freq = tblManipInfo,
+            CumFreq = cumsum(tblManipInfo),
+            RelFreq = 100*tblManipInfo/sum(tblManipInfo),
+            CumRelFreq = 100*cumsum(tblManipInfo)/sum(tblManipInfo)), 3)
 
 #---------------------------------------
 # INTERVALSCHATTING KWANTITATIEVE VARS.
@@ -907,6 +943,7 @@ summary(resultANORASC)
 
 # SCHIPHOLCAR EN SCHIPHOLTRAIN
 #-----------------------------------------------------------------------------------------------
+# Hier wordt de kruistabel aangemaakt van SchipholCar en SchipholTrain.
 tabelSCST <- table(dsCase$SchipholCar, dsCase$SchipholTrain)
 addmargins(tabelSCST)
 
@@ -946,24 +983,12 @@ Hmisc::rcorr(as.matrix(dsSubDKH))
 #-----------------------------------------------------------------------------------------------
 # MEERVOUDIGE SAMENHANG
 #-----------------------------------------------------------------------------------------------
-# Factoren aanmaken
-FacManipInfo <- factor(dsCase$ManipInfo,labels=c("Yes", "No"))
-levels(FacManipInfo)
-
-FacManipTax <- factor(dsCase$ManipTax,labels=c("only price flight ticket", 
-                                               "price flight ticket including low tax", 
-                                               "price including high tax"))
-levels(FacManipTax)
-
-FacSchipholCar <- factor(dsCase$SchipholCar,labels=c("<30", "30-45", 
-                                                     "45-60",">60", "no car"))
-levels(FacSchipholCar)
-
-FacSchipholTrain<-factor(dsCase$SchipholTrain, labels=c("<30", "30-45", "45-60",">60"))
-levels(FacSchipholTrain)
-
-FacManipDest <- factor(dsCase$ManipDest, labels=c("Berlin", "London", "Marseille"))
+# Factoren ophalen uit beschrijvende analyse. 
 levels(FacManipDest)
+levels(FacManipInfo)
+levels(FacManipTax)
+levels(FacSchipholCar)
+levels(FacSchipholTrain)
 
 #------------------------------------------------------------------------------------
 # Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
@@ -982,36 +1007,12 @@ rsltC<- lm(ModelB, data=dsCase)
 #-----------------------------------------------------------------------------------------------
 # REGRESSIE ANALYSE
 #-----------------------------------------------------------------------------------------------
-# Factoren aanmaken
-
-dsCase$ManipDest <- factor(dsCase$ManipDest,
-                           levels = c(1:3), 
-                           labels = c("Londen", "Berlin", "Marseille"))
-dsCase$ManipInfo <- factor(dsCase$ManipInfo, 
-                           levels = c(1:2), 
-                           labels = c("No information on travel time", 
-                                      "Information on travel time"))
-
-dsCase$ManipTax <- factor(dsCase$ManipTax, 
-                          levels = c(1:3), 
-                          labels = c("only price flight ticket", 
-                                     "price flight ticket including tax", 
-                                     "price including high tax"))
-dsCase$SchipholCar <- factor(dsCase$SchipholCar,
-                             levels = c(1:5),
-                             labels = c("< 30 min", "30-45 min", "45-60 min", "> 60 min",
-                                        "i do not have the option to go by car")) 
-
-dsCase$SchipholTrain <- factor(dsCase$SchipholTrain,
-                               levels = c(1:4),
-                               labels = c("< 30 min", "30-45 min", "45-60 min", "> 60 min"))
-
-levels(dsCase$f.ManipDest)
-levels(dsCase$f.ManipInfo)
-levels(dsCase$f.ManipTax)
-levels(dsCase$f.SchipholCar)
-levels(dsCase$f.SchipholTrain)
-
+# Factoren ophalen uit beschrijvende analyse.  
+levels(FacManipDest)
+levels(FacManipInfo)
+levels(FacManipTax)
+levels(FacSchipholCar)
+levels(FacSchipholTrain)
 
 #----------------------------------------------------------------------------------------------
 # Regressiemodel RateAirplane
