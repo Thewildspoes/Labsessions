@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
 #------------------------------------------------------------------------------------
 #                                     SMT CASE 2020 
 # Amani Berkhof - Lu Li Heerkens - Barbara van Leeuwen - Iris de Ruyter de Wildt
@@ -11,13 +13,13 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-# setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-# setwd("/Users/amaniberkhof/Documents/Labsessions")
+setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
-setwd("C:/Users/Barbara/Documents/Labsessions/Labsessions/Labsessions-master")
+#setwd("C:/Users/Barbara/Documents/Labsessions/Labsessions/Labsessions-master")
 
 
 # Hier lees je de file in met de data van de enquete. Dit moet csv2 zijn
@@ -45,7 +47,7 @@ library(ggplot2)
 # install.packages("stargazer", dependencies = TRUE)
 library(stargazer)
 
- # Hier wordt het gmodels pakket eenmalig geinstalleerd, wordt gebruikt voor
+# Hier wordt het gmodels pakket eenmalig geinstalleerd, wordt gebruikt voor
 # contingency models.
 #  "#" moet weg voor "install.packages" wanneer je het pakket nog moet instaleren.
 # install.packages("gmodels", dependencies = TRUE)
@@ -1015,31 +1017,21 @@ levels(FacSchipholTrain)
 ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
   ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
 lm(ModelA, data=dsCase)
+
 rsltA<- lm(ModelA, data=dsCase)
+
+summary(rsltA)
 
 # Regressie CO2CompMax
 ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
-  Big01 + Big05 + ImportPrice + ManipTax
+  avgPersonal + ImportPrice + ManipTax
 lm(ModelB, data=dsCase)
-rsltC<- lm(ModelB, data=dsCase)
+rsltB<- lm(ModelB, data=dsCase)
 
-#-----------------------------------------------------------------------------------------------
-# REGRESSIE ANALYSE
-#-----------------------------------------------------------------------------------------------
-# Factoren ophalen uit beschrijvende analyse.  
-levels(FacManipDest)
-levels(FacManipInfo)
-levels(FacManipTax)
-levels(FacSchipholCar)
-levels(FacSchipholTrain)
+summary(rsltB)
 
 #----------------------------------------------------------------------------------------------
 # Regressiemodel RateAirplane
 mdlA <- rateAirplane ~ FacSchipholCar + FacSchipholTrain +
   ImportTime + FacManipInfo + ImportComfort + 
   ImportPrice + avgPersonal + FacManipDest
-
-lm(mdlA, data =dsCase)
-rsltA <- lm(mdlA, data =dsCase)
-str(mdlA)
-
