@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 #------------------------------------------------------------------------------------
 #                                     SMT CASE 2020 
 # Amani Berkhof - Lu Li Heerkens - Barbara van Leeuwen - Iris de Ruyter de Wildt
@@ -13,9 +11,9 @@
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
 # Vergeet niet te kijken of je de juiste WD aan het staan. Een WD van iemand anders
 # kan je uitzetten door voor "SetWD" een # te zetten. 
-#setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
+setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-setwd("/Users/amaniberkhof/Documents/Labsessions")
+# setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
@@ -976,21 +974,47 @@ rsltAOV <- aov(rateAirplane ~ FacSchipholCar * FacManipTax,
                data=dsCase)
 
 Anova(rsltAOV,type=c("III"))
+summary.lm(rsltAOV)
+summary.lm(rsltAOV)$fstatistic
 
-
-# Pearsons Correlatie Coefficient
-
-
-# Partiële correlatie
-#doorkruisende effecten van een derde variabele
-#anova met covariaat, om doorkruisendheid te meten
-#two-way anova meet je het interactie effect van een kwalitatieve 
-#alle ? betekenen willen we zien of hij wordt verstoord door de vars waar een z bij staat.
-
-
+# ANOVA MET COVARIAAT
 #-----------------------------------------------------------------------------------------------
-# Nep opschonen voor de relatie tussen Guilt en CO2CompMax
+# GuiltFeel
+summary(aov(avgGuiltFeel ~ avgEnvironBelief,data=dsCase))
+summary(aov(CO2CompMax ~ avgEnvironBelief, data=dsCase))
+rcorr(as.matrix(dsCase[c("avgGuiltFeel","CO2CompMax")]))
 
+rslt1AOVCOBefore <- aov(avgGuiltFeel ~ avgEnvironBelief,data=dsCase)
+rslt1AOVCOAfter <- aov(CO2CompMax ~ avgEnvironBelief, data=dsCase)
+
+# Resultaten voor en na purgen covariaat EnvironBelief
+Anova(rslt1AOVCOBefore,type=c("III"))
+Anova(rslt1AOVCOAfter,type=c("III"))
+
+# BIG Extraversion (Personal)
+summary(aov(avgPersonal ~ avgGuiltFeel,data=dsCase))
+summary(aov(CO2CompMax ~ avgGuiltFeel, data=dsCase))
+rcorr(as.matrix(dsCase[c("avgPersonal","CO2CompMax")]))
+
+rslt2AOVCOBefore <- aov(avgPersonal ~ avgGuiltFeel,data=dsCase)
+rslt2AOVCOAfter <- aov(CO2CompMax ~ avgGuiltFeel, data=dsCase)
+
+# Resultaten voor en na purgen covariaat GuiltFeel
+Anova(rslt2AOVCOBefore,type=c("III"))
+Anova(rslt2AOVCOAfter,type=c("III"))
+
+# ANALYSE VAN DEELPOPULATIES
+#-----------------------------------------------------------------------------------------------
+# Voor purgen kwantitatieve variabelen:
+rcorr(as.matrix(dsCase[c("ImportTime","rateAirplane")]))
+
+# Na purgen kwantitatieve variabelen:
+by(dsCase[c("ImportTime","rateAirplane")],
+   FacManipInfo,
+   function(x) rcorr(as.matrix(x)))
+
+# PEARSONS PARTIELE CORRELATIE
+#-----------------------------------------------------------------------------------------------
 # Uitvoeren partiële correlatie
 dsSubDKH <- subset(dsCase,
                    select=c("avgGuiltFeel", "CO2CompMax", "avgPersonal"))
@@ -1014,7 +1038,6 @@ levels(FacSchipholTrain)
 #------------------------------------------------------------------------------------
 # Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
 # Regressie rateAirplane 
-# Causaal relatieschema
 ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
   ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief
 lm(ModelA, data=dsCase)
@@ -1022,15 +1045,10 @@ lm(ModelA, data=dsCase)
 rsltA<- lm(ModelA, data=dsCase)
 
 summary(rsltA)
-
-stargazer::stargazer(rsltA,
-          title="Regressieresultaten voor rateAirplane",
-          no.space=TRUE, align = TRUE,
-          intercept.bottom = FALSE)
-
+vif(rsltA)
+1 /vif(rsltA) 
 
 # Regressie CO2CompMax
-# Causaal relatieschema
 ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
   avgPersonal + ImportPrice + ManipTax
 lm(ModelB, data=dsCase)
@@ -1038,7 +1056,10 @@ rsltB<- lm(ModelB, data=dsCase)
 
 summary(rsltB)
 
-stargazer::stargazer(rsltB,
-                     title="Regressieresultaten voor CO2CompMax",
-                     no.space=TRUE, align = TRUE,
-                     intercept.bottom = FALSE)
+#----------------------------------------------------------------------------------------------
+# Regressiemodel RateAirplane
+mdlA <- rateAirplane ~ FacSchipholCar + FacSchipholTrain +
+  ImportTime + FacManipInfo + ImportComfort + 
+  ImportPrice + avgPersonal + FacManipDest
+
+
