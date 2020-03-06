@@ -3,9 +3,9 @@
 # Amani Berkhof - Lu Li Heerkens - Barbara van Leeuwen - Iris de Ruyter de Wildt
 #------------------------------------------------------------------------------------
 
-#------------------------------------------------------------------------------------
+##################################################################################
 # Instellen werkruimte en inlezen van gegevens en pakketten
-#------------------------------------------------------------------------------------
+##################################################################################
 # Hier zetten we de working directory vast. Dit moet verandert worden als 
 # er een andere laptop gebruikt wordt. De working directories van iedereen worden
 # hier neergezet om zo allemaal in hetzelfde bestand te kunnen werken. H
@@ -13,7 +13,7 @@
 # kan je uitzetten door voor "SetWD" een # te zetten. 
 setwd("/Users/irisderuyterdewildt/Desktop/EUR/SMT/Labsessions")
 
-# setwd("/Users/amaniberkhof/Documents/Labsessions")
+#setwd("/Users/amaniberkhof/Documents/Labsessions")
 
 #setwd("/Users/luliheerkens/Documents/Bedrijfskunde (BA)/practicum S&T/Data")
 
@@ -81,9 +81,13 @@ library(plyr)
 # install.packages("ppcor", dependencies = TRUE)
 library(ppcor)
 
-#----------------------------------
+# Installeer PLYR package eenmalig
+install.packages ("plyr", dependencies = TRUE)
+library (plyr)
+
+##################################################################################
 # CONSTRUCTIE LIKERT-SCHALEN
-#----------------------------------
+##################################################################################
 # Eerst wordt er een overkoepelende term aangemaakt die Nep01 tot Nep05
 # samenvat zodat er niet continu de hele rij herschreven hoeft te worden.
 # Vervolgens wordt de Cronbach's Alpha berekend voor Environmental Beliefs (EnvironBelief). 
@@ -141,9 +145,9 @@ dsCase$avgPersonal <- rsltPersonal$scores
 
 str(rsltPersonal)
 
-#-------------------------------------------------
+##################################################################################
 # BESCHRIJVENDE ANALYSE / UNIVARIAAT KWANTITATIEF
-#-------------------------------------------------
+##################################################################################
 # De tabel wordt hier aangemaakt
 tblBS <- psych:: describe (dsCase[c("ManipDest", "ManipInfo", "ManipTax", "SchipholTrain", 
                                   "SchipholCar", "avgEnvironBelief", "avgGuiltFeel", 
@@ -237,9 +241,9 @@ round(cbind(Freq = tblManipInfo,
             RelFreq = 100*tblManipInfo/sum(tblManipInfo),
             CumRelFreq = 100*cumsum(tblManipInfo)/sum(tblManipInfo)), 3)
 
-#---------------------------------------
+#-----------------------------------------------------------------------------------
 # INTERVALSCHATTING KWANTITATIEVE VARS.
-#---------------------------------------
+#-----------------------------------------------------------------------------------
 # Aanmaken Alpha
 alpha <- 0.05 
 
@@ -270,10 +274,70 @@ tblInterSchat <- describe(dsCase[myVars], skew = FALSE, ranges = FALSE)
 write.csv2(tblInterSchat, file = "IntervalSchatting_tbl.csv")
 
 
-#----------------------------------
+#---------------------------------------------------------------------------------- 
 # UITBIJTERANALYSE
-#----------------------------------
+#----------------------------------------------------------------------------------
+# Histogrammen aanmaken
+#----------------------------------------------------------------------------------
+# rateAirplane
+ggplot2::ggplot(dsCase, ggplot2::aes(x = rateAirplane)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("rateAirplane") +
+  ggplot2::xlim(0,100)
+ggplot2::ggsave(paste0("Histo_rateAir.pdf")) 
+
+# CO2CompMax
+ggplot2::ggplot(dsCase, ggplot2::aes(x = CO2CompMax)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("CO2CompMax") +
+  ggplot2::xlim(0,750) +
+  ggplot2::ylim(0,40)
+ggplot2::ggsave(paste0("Histo_CO2.pdf")) 
+
+# ImportComfort
+ggplot2::ggplot(dsCase, ggplot2::aes(x = ImportComfort)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("ImportComfort") +
+  ggplot2::xlim(0,105)
+ggplot2::ggsave(paste0("Histo_ImportComf.pdf")) 
+
+# ImportPrice
+ggplot2::ggplot(dsCase, ggplot2::aes(x = ImportPrice)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("ImportPrice") +
+  ggplot2::xlim(0,105)
+ggplot2::ggsave(paste0("Histo_ImportPrice.pdf")) 
+
+# ImportTime
+ggplot2::ggplot(dsCase, ggplot2::aes(x = ImportTime)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("ImportTime") +
+  ggplot2::xlim(0,100)
+ggplot2::ggsave(paste0("Histo_ImportTime.pdf")) 
+
+# avgEnvironBelief
+ggplot2::ggplot(dsCase, ggplot2::aes(x = avgEnvironBelief)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("avgEnvironBelief") +
+  ggplot2::xlim(1,7)
+ggplot2::ggsave(paste0("Histo_ENVIRON.pdf")) 
+
+# avgGuiltFeel
+ggplot2::ggplot(dsCase, ggplot2::aes(x = avgGuiltFeel)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("avgGuiltFeel") +
+  ggplot2::xlim(1,5.5)
+ggplot2::ggsave(paste0("Histo_GuiltFeel.pdf")) 
+
+# avgPersonal
+ggplot2::ggplot(dsCase, ggplot2::aes(x = avgPersonal)) +
+  ggplot2::geom_histogram(bins=15, fill = "darkgreen", col = "black") +
+  ggplot2::xlab("avgPersonal") +
+  ggplot2::xlim(1,5.5)
+ggplot2::ggsave(paste0("Histo_Personal.pdf")) 
+
 # z scores berekenen
+#----------------------------------------------------------------------------------
 zCO2CompMax <- scale(dsCase$CO2CompMax)
 which(zCO2CompMax>3)
 which(abs(zCO2CompMax)>3)
@@ -282,18 +346,22 @@ zCO2CompMax
 zrateAirplane <- scale(dsCase$rateAirplane)
 which(zrateAirplane>3)
 which(abs(zrateAirplane)>3)
+zrateAirplane
 
 zImportComfort <- scale(dsCase$ImportComfort)
 which(zImportComfort>3)
 which(abs(zImportComfort)>3)
+zImportComfort
 
 zImportPrice <- scale(dsCase$ImportPrice)
 which(zImportPrice>3)
 which(abs(zImportPrice)>3)
+zImportPrice
 
 zImportTime <- scale(dsCase$ImportTime)
 which(zImportTime>3)
 which(abs(zImportTime)>3)
+zImportTime
 
 zavgEnvironBelief <- scale(dsCase$avgEnvironBelief)
 which(zavgEnvironBelief>3)
@@ -303,13 +371,15 @@ zavgEnvironBelief
 zavgGuiltFeel <- scale(dsCase$avgGuiltFeel)
 which(zavgGuiltFeel>3)
 which(abs(zavgGuiltFeel)>3)
+zavgGuiltFeel
 
 zavgPersonal <- scale(dsCase$avgPersonal)
 which(zavgPersonal>3)
 which(abs(zavgPersonal)>3)
+zavgPersonal
 
 # Weglaten uitbijters
-#----------------------------------
+#----------------------------------------------------------------------------------
 # CO2CompMax
 CO2CompMaxBefore <- mean(dsCase$CO2CompMax, na.rm=TRUE)
 
@@ -327,36 +397,13 @@ rateAirplaneBefore <- mean(dsCase$rateAirplane, na.rm=TRUE)
 
 rateAirplaneAfter <- mean(dsCase$rateAirplane[-which(abs(zrateAirplane)>3)],
                           na.rm=TRUE)
+rateAirplaneBefore
+rateAirplaneAfter
 
 cat("Absolute difference after and before",
     (rateAirplaneAfter - rateAirplaneBefore))
 cat("Relative difference after and before (in pct)",
     100*(rateAirplaneAfter - rateAirplaneBefore)/rateAirplaneBefore)
-
-# ImportComfort
-ImportComfortBefore <- mean(dsCase$ImportComfort, na.rm=TRUE)
-
-ImportComfortAfter <- mean(dsCase$ImportComfort[-which(abs(zImportComfort)>3)],
-                           na.rm=TRUE)
-ImportComfortBefore
-ImportComfortAfter
-cat("Absolute difference after and before",
-    (ImportComfortAfter - ImportComfortBefore))
-cat("Relative difference after and before (in pct)",
-    100*(ImportComfortAfter - ImportComfortBefore)/ImportComfortBefore)
-
-
-# ImportPrice
-ImportPriceBefore <- mean(dsCase$ImportPrice, na.rm=TRUE)
-
-ImportPriceAfter <- mean(dsCase$ImportPrice[-which(abs(zImportPrice)>3)],
-                         na.rm=TRUE)
-ImportPriceBefore
-ImportPriceAfter
-cat("Absolute difference after and before",
-    (ImportPriceAfter - ImportPriceBefore))
-cat("Relative difference after and before (in pct)",
-    100*(ImportPriceAfter - ImportPriceBefore)/ImportPriceBefore)
 
 # ImportTime
 ImportTimeBefore <- mean(dsCase$ImportTime, na.rm=TRUE)
@@ -365,47 +412,28 @@ ImportTimeAfter <- mean(dsCase$ImportTime[-which(abs(zImportTime)>3)],
                         na.rm=TRUE)
 ImportTimeBefore
 ImportTimeAfter
+
 cat("Absolute difference after and before",
     (ImportTimeAfter - ImportTimeBefore))
 cat("Relative difference after and before (in pct)",
     100*(ImportTimeAfter - ImportTimeBefore)/ImportTimeBefore)
-
-# avgEnvironBelief
-avgEnvironBeliefBefore <- mean(dsCase$avgEnvironBelief, na.rm=TRUE)
-
-avgEnvironBeliefAfter <- mean(dsCase$avgEnvironBelief[-which(abs(zavgEnvironBelief)>3)],
-                              na.rm=TRUE)
-
-cat("Absolute difference after and before",
-    (avgEnvironBeliefAfter - avgEnvironBeliefBefore))
-cat("Relative difference after and before (in pct)",
-    100*(avgEnvironBeliefAfter - avgEnvironBeliefBefore)/avgEnvironBeliefBefore)
-
-# avgGuiltFeel
-avgGuiltFeelBefore <- mean(dsCase$avgGuiltFeel, na.rm=TRUE)
-
-avgGuiltFeelAfter <- mean(dsCase$avgGuiltFeel[-which(abs(zavgGuiltFeel)>3)],
-                          na.rm=TRUE)
-
-cat("Absolute difference after and before",
-    (avgGuiltFeelAfter - avgGuiltFeelBefore))
-cat("Relative difference after and before (in pct)",
-    100*(avgGuiltFeelAfter - avgGuiltFeelBefore)/avgGuiltFeelBefore)
 
 # avgPersonal
 avgPersonalBefore <- mean(dsCase$avgPersonal, na.rm=TRUE)
 
 avgPersonalAfter <- mean(dsCase$avgPersonal[-which(abs(zavgPersonal)>3)],
                          na.rm=TRUE)
+avgPersonalBefore
+avgPersonalAfter
 
 cat("Absolute difference after and before",
     (avgPersonalAfter - avgPersonalBefore))
 cat("Relative difference after and before (in pct)",
     100*(avgPersonalAfter - avgPersonalBefore)/avgPersonalBefore)
 
-#----------------------------------
+##################################################################################
 # ANALYSE PAARSGEWIJZE SAMENHANG
-#----------------------------------
+##################################################################################
 #----------------------------------
 # KWANTITATIEF
 # ---------------------------------
@@ -425,7 +453,13 @@ dsCase$Nep02[is.na(dsCase$Nep02)] <-
 # RATEAIRPLANE EN IMPORTCOMFORT
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken van ImportComfort en rateAirplane 
-outliersICRA <- dsCase[dsCase$ImportComfort > 80 & dsCase$rateAirplane > 80,
+plot(dsCase$ImportComfort,dsCase$rateAirplane,
+     main="Scatter plot van ImportComfort tegenover rateAirplane",
+     ylab="ImportComfort", 
+     xlab="rateAirplane",
+     las=1, pch=19, col="blue")
+
+outliersICRA <- dsCase[dsCase$rateAirplane > 80 & dsCase$ImportComfort > 80, 
                        c("ImportComfort","rateAirplane")]
 outliersICRA
 
@@ -453,8 +487,13 @@ Hmisc::rcorr(as.matrix(dsSubICRA), type="pearson")
 # RATEAIRPLANE EN IMPORTPRICE
 #-----------------------------------------------------------------------------------------------
 # Outliers van rateAirplane en ImportPrice
-outliersIPRA <- dsCase[dsCase$ImportPrice < 40 & dsCase$rateAirplane < 40,
-                       c("ImportPrice","rateAirplane")]
+plot(dsCase$rateAirplane,dsCase$ImportPrice,
+     main="Scatter plot van rateAirplane tegenover ImportPrice",
+     ylab="ImportPrice", 
+     xlab="rateAirplane",
+     las=1, pch=19, col="blue")
+
+outliersIPRA <- dsCase[dsCase$rateAirplane < 40 & dsCase$ImportPrice < 25, c("rateAirplane","ImportPrice")]
 outliersIPRA
 
 # ggplot aanmaken met lijn, outliers en density weergave.
@@ -481,8 +520,14 @@ Hmisc::rcorr(as.matrix(dsSubIPRA), type="pearson")
 # RATEAIRPLANE & IMPORTTIME
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor rateAirplane en ImportTime
-outliersITRA <- dsCase[dsCase$ImportTime < 40 & dsCase$rateAirplane < 40,
-                       c("ImportTime","rateAirplane")]
+plot(dsCase$ImportTime, dsCase$rateAirplane,
+     main="Scatter plot van rateAirplane tegenover ImportTime",
+     ylab="ImportTime", 
+     xlab="rateAirplane",
+     las=1, pch=19, col="blue")
+
+outliersITRA <- dsCase[dsCase$rateAirplane < 45 & dsCase$ImportTime < 40, 
+                       c("rateAirplane","ImportTime")]
 outliersITRA
 
 # ggplot aanmaken met lijn, outliers en density weergave.
@@ -509,8 +554,14 @@ Hmisc::rcorr(as.matrix(dsSubITRA), type="pearson")
 # RATEAIRPLANE EN NEP (ENVIRONBELIEF)
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor rateAirplane en NEP (EnvironBelief)
-outliersEBRA <- dsCase[dsCase$avgEnvironBelief & dsCase$rateAirplane < 40,
-                       c("avgEnvironBelief","rateAirplane")]
+plot(dsCase$avgEnvironBelief, dsCase$rateAirplane,
+     main="Scatter plot van rateAirplane tegenover avgEnvironBelief",
+     ylab="avgEnvironBelief", 
+     xlab="rateAirplane",
+     las=1, pch=19, col="blue")
+
+outliersEBRA <- dsCase[dsCase$rateAirplane < 10, 
+                       c("rateAirplane","avgEnvironBelief")]
 outliersEBRA
 
 # ggplot aanmaken met lijn, outliers en density weergave.
@@ -537,9 +588,13 @@ Hmisc::rcorr(as.matrix(dsSubEBRA), type="pearson")
 # GUILT (GUILTFEEL) EN NEP (ENVIRONBELIEF)
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor Guilt (GuiltFeel) en NEP (EnvironBelief)
-geom_sm
+plot(dsCase$avgGuiltFeel, dsCase$avgEnvironBelief,
+     main="Scatter plot van avgGuiltFeel tegenover avgEnvironBelief",
+     ylab="avgGuiltFeel", 
+     xlab="avgEnvironBelief",
+     las=1, pch=19, col="blue")
 
-outliersGFEB <- dsCase[dsCase$avgGuiltFeel < 2 & dsCase$avgEnvironBelief < 2,
+outliersGFEB <- dsCase[dsCase$avgGuiltFeel > 4, 
                        c("avgGuiltFeel","avgEnvironBelief")]
 outliersGFEB
 
@@ -595,11 +650,19 @@ Hmisc::rcorr(as.matrix(dsSubEBCO2), type="pearson")
 # GUILT (GUILTFEEL) EN CO2COMPMAX
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor GuiltFeel en CO2CompMax
-outliersGFCO2 <- dsCase[dsCase$avgGuiltFeel < 5 & dsCase$CO2CompMax >= 30,
-                        c("avgGuiltFeel","CO2CompMax")]
+plot(dsCase$avgGuiltFeel, dsCase$CO2CompMax,
+     main="Scatter plot van avgGuiltFeel tegenover CO2CompMax",
+     ylab="avgGuiltFeel", 
+     xlab="CO2CompMax",
+     las=1, pch=19, col="blue")
+
+outliersGFCO2 <- dsCase[dsCase$CO2CompMax >= 40, 
+                       c("avgGuiltFeel","CO2CompMax")]
 outliersGFCO2
 
-# ggplot aanmaken met lijn, outliers en density weergave.
+# ggplot aanmaken met lijn, outliers en density weergave.Om de weergave duidelijker
+# te maken is ervoor gekozen om de ylim op 55 te stellen. er vallen hierdoor 13 waarden
+# af die door ons worden beschouwt als outliers. 
 ggplot2::ggplot(dsCase, ggplot2::aes(x=avgGuiltFeel, y=CO2CompMax)) +
   ggplot2::geom_point(col="blue") +
   ggplot2::labs(title = "Gemiddelde GuiltFeel / CO2CompMax") +
@@ -623,8 +686,14 @@ Hmisc::rcorr(as.matrix(dsSubGFCO2), type="pearson")
 # BIG (PERSONAL) EN CO2COMPMAX
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor Personal en CO2CompMax
-outliersPSCO2 <- dsCase[dsCase$avgPersonal < 6 & dsCase$CO2CompMax > 40,
-                        c("avgPersonal","CO2CompMax")]
+plot(dsCase$avgPersonal, dsCase$CO2CompMax,
+     main="Scatter plot van avgPersonal tegenover CO2CompMax",
+     ylab="avgPersonal", 
+     xlab="CO2CompMax",
+     las=1, pch=19, col="blue")
+
+outliersPSCO2 <- dsCase[dsCase$CO2CompMax >= 40, 
+                       c("avgPersonal","CO2CompMax")]
 outliersPSCO2
 
 # ggplot aanmaken met lijn, outliers en density weergave.
@@ -651,7 +720,13 @@ Hmisc::rcorr(as.matrix(dsSubPSCO2), type="pearson")
 # BIG (PERSONAL) EN GUILT (GUITLFEEL)
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor Personal en GuiltFeel
-outliersPSGF <- dsCase[dsCase$avgPersonal < 2 & dsCase$avgGuiltFeel < 40,
+plot(dsCase$avgPersonal, dsCase$avgGuiltFeel,
+     main="Scatter plot van avgGuiltFeel tegenover avgPersonal",
+     ylab="avgPersonal", 
+     xlab="avgGuiltFeel",
+     las=1, pch=19, col="blue")
+
+outliersPSGF <- dsCase[dsCase$avgGuiltFeel > 4.5, 
                        c("avgPersonal","avgGuiltFeel")]
 outliersPSGF
 
@@ -679,8 +754,14 @@ Hmisc::rcorr(as.matrix(dsSubPSGF), type="pearson")
 # CO2COMPMAX EN IMPORTPRICE 
 #-----------------------------------------------------------------------------------------------
 # Outliers aanmaken voor CO2CompMax en ImportPrice
-outliersIPCO2 <- dsCase[dsCase$CO2CompMax > 40 & dsCase$ImportPrice < 40,
-                        c("CO2CompMax","ImportPrice")]
+plot(dsCase$ImportPrice, dsCase$CO2CompMax,
+     main="Scatter plot van ImportPrice tegenover CO2CompMax",
+     ylab="ImportPrice", 
+     xlab="CO2CompMax",
+     las=1, pch=19, col="blue")
+
+outliersIPCO2 <- dsCase[dsCase$CO2CompMax >= 40, 
+                       c("ImportPrice","CO2CompMax")]
 outliersIPCO2
 
 # ggplot aanmaken met lijn, outliers en density weergave.
@@ -706,7 +787,6 @@ Hmisc::rcorr(as.matrix(dsSubIPCO2), type="pearson")
 #-----------------------------------------------------------------------------------------------
 # T-TOETS BEREKENEN
 #-----------------------------------------------------------------------------------------------
-
 # RATEAIRPLANE EN MANIPINFO
 #-----------------------------------------------------------------------------------------------
 # Hier wordt een tabel van kengetallen van rateAirplane aangemaakt en een steekproef van
@@ -764,7 +844,6 @@ wilcox.test(dsCase$ImportTime ~ dsCase$ManipInfo)
 #-----------------------------------------------------------------------------------------------
 # ONEWAY ANOVA
 #-----------------------------------------------------------------------------------------------
-
 # MANIPTAX EN CO2COMPMAX
 #-----------------------------------------------------------------------------------------------
 # ManipTax: one-way tabel met frequenties
@@ -947,7 +1026,6 @@ summary(resultANORASC)
 #-----------------------------------------------------------------------------------------------
 # KRUISTABEL
 #-----------------------------------------------------------------------------------------------
-
 # SCHIPHOLCAR EN SCHIPHOLTRAIN
 #-----------------------------------------------------------------------------------------------
 # Hier wordt de kruistabel aangemaakt van SchipholCar en SchipholTrain.
@@ -966,22 +1044,41 @@ cbind(ChisqStat = rsltChisqSCST$statistic,
       df        = rsltChisqSCST$parameter, 
       ChisqSig  = rsltChisqSCST$p.value)
 
-#-----------------------------------------------------------------------------------------------
+#################################################################################
 # DOORKRUISENDHEDEN EN INTERACTIES
-#-----------------------------------------------------------------------------------------------
+##################################################################################
 # TWO-WAY ANOVA
 #-----------------------------------------------------------------------------------------------
 # Two-Way Anova SchipholCar, rateAirplane --> ManipTax
-anova(aov(rateAirplane ~ FacSchipholCar * FacManipTax, data = dsCase))
-anova(aov(rateAirplane ~ FacSchipholCar + FacManipTax, data = dsCase))
+options(contrasts = c("contr.sum", "contr.poly"))
 
-# Type III Anova
-rsltAOV <- aov(rateAirplane ~ FacSchipholCar * FacManipTax,
-               data=dsCase)
+rslt2WAYAOV <- aov(rateAirplane ~ FacManipTax * FacSchipholCar, data = dsCase)
 
-Anova(rsltAOV,type=c("III"))
-summary.lm(rsltAOV)
-summary.lm(rsltAOV)$fstatistic
+Anova(rslt2WAYAOV, type = c("III"), singular.ok = TRUE)
+
+summary.lm(rslt2WAYAOV)
+summary.lm(rslt2WAYAOV)$fstatistic
+
+Fobs <- summary.lm(rslt2WAYAOV)$fstatistic
+df1 <- summary.lm(rslt2WAYAOV)$fstatistic
+df2 <- summary.lm(rslt2WAYAOV)$fstatistic
+
+pValue <- 1-pf(Fobs, df1, df2)
+
+interaction.plot(FacManipTax, FacSchipholCar,
+                     dsCase$rateAirplane,
+                     type ="b", col =c (1:3) ,
+                     leg.bty ="o", leg.bg ="white", lwd =2,
+                     pch =c(18 ,24 ,22),
+                     trace.label =" dType2 ",
+                     xlab = "Tax mogelijkheden (ManipTax)",
+                     ylab = "Mean rateAirplane intensiteit",
+                     main = "Interaction Plot")
+
+ddply(dsCase,.(FacManipTax, FacSchipholCar), summarise,
+        nobs = length(rateAirplane),
+        avg = mean(rateAirplane),
+        std = sd(rateAirplane))
 
 # ANOVA MET COVARIAAT
 #-----------------------------------------------------------------------------------------------
@@ -1050,9 +1147,9 @@ Hmisc::rcorr(as.matrix(dsSubDKH2), type="pearson")
 
 Hmisc::rcorr(as.matrix(dsSubDKH2))
 
-#-----------------------------------------------------------------------------------------------
+##################################################################################
 # MEERVOUDIGE SAMENHANG
-#-----------------------------------------------------------------------------------------------
+##################################################################################
 # Factoren ophalen uit beschrijvende analyse. 
 levels(FacManipDest)
 levels(FacManipInfo)
@@ -1061,8 +1158,7 @@ levels(FacSchipholCar)
 levels(FacSchipholTrain) 
 
 #------------------------------------------------------------------------------------
-# Hier worden de verschillende regressies uitgerekend voor de verklarende variabelen 
-# REGRESSIE RATEAIRPLANE
+# REGRESSIE ANALYSE RATEAIRPLANE
 # Causaal relatieschema
 #------------------------------------------------------------------------------------
 ModelA <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
@@ -1152,7 +1248,6 @@ lmtest::dwtest(rsltA)
 ModelQ <- rateAirplane ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
   ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief + avgGuiltFeel + avgPersonal
 
-
 rsltQ <- lm(ModelQ,data=dsCase)
 
 summary(rsltQ)
@@ -1166,7 +1261,7 @@ rsltP <- lm(ModelP,data=dsCase)
 summary(rsltP)
 
 
-# REGRESSIE CO2COMPMAX
+# REGRESSIE ANALYSE CO2COMPMAX
 # Causaal relatieschema
 #------------------------------------------------------------------------------------
 ModelB <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
@@ -1251,12 +1346,12 @@ summary(lm(ModelB.adj,data=dsCase))
 # Durbin Watson toetsgrootheid
 lmtest::dwtest(rsltB)
 
-# Toevoegen avgGuilt en avgPersonal
-ModelQ2 <- CO2CompMax ~ SchipholCar + SchipholTrain + ManipDest + ImportTime + 
-  ManipInfo + ImportComfort + ImportPrice + avgEnvironBelief + avgGuiltFeel + avgPersonal
-
+# Toevoegen ImportComfort en ManipDest
+ModelQ2 <- CO2CompMax ~ avgEnvironBelief + avgGuiltFeel + 
+  avgPersonal + ImportPrice + ManipTax + ImportComfort + ManipDest
 
 rsltQ2 <- lm(ModelQ2,data=dsCase)
+summary(rsltQ2)
 
 # Testen van interactie Nep en Guilt
 ModelP2 <- CO2CompMax ~ avgEnvironBelief * avgGuiltFeel + 
@@ -1265,9 +1360,6 @@ ModelP2 <- CO2CompMax ~ avgEnvironBelief * avgGuiltFeel +
 rsltP2 <- lm(ModelP2,data=dsCase)
 
 summary(rsltP2)
-
-
-summary(rsltQ2)
 
 #------------------------------------------------------------------------------------
 #                                   EINDE SMT CASE
